@@ -22,7 +22,15 @@ class Game(object):
                 
     def GameSetup (self):
         
-        WorkerDeck = Deck (WORKER_CARDS, WORKER_CARD_TYPE)
-        WorkerDeck.GetCardNames()
+        self.WorkerDeck = Deck (WORKER_CARDS, WORKER_CARD_TYPE)
+        self.WorkerDeck.Shuffle()
+        for x in range (len(self.WorkerDeck.Cards)) :
+            print (self.WorkerDeck.Cards[x].CardOrder, self.WorkerDeck.Cards[x].CardName)
+            
+            
+        #self.BuildingDeck = Deck (BUILDING_CARDS, BUILDING_CARD_TYPE)
+        #self.AristocratDeck = Deck (ARISTOCRAT_CARDS, ARISTOCRAT_CARD_TYPE)
+        
+        
 
             

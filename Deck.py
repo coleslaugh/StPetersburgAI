@@ -4,6 +4,7 @@ Created on Aug 25, 2021
 @author: mikes
 '''
 from Card import *
+from _ast import Lambda
 
 
 
@@ -29,9 +30,10 @@ class Deck(object):
                 self.Cards.append(Card(x[0]))
                 i += 1
                 
-
-
-                
+    def Shuffle (self):
+        self.Cards.sort(key=lambda s: s.CardOrder, reverse=False)
+        
+               
     def GetCardNames (self):
         for x in self.Cards :
             print (x.CardName)

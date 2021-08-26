@@ -3,6 +3,7 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
+from random import random
 
 
 class Card(object):
@@ -19,6 +20,7 @@ class Card(object):
     isSpecialCard = 0
     SpecialAbility = 0
     CardClass = 0
+    CardOrder = 0
 
 
     def __init__(self, param):
@@ -34,3 +36,4 @@ class Card(object):
         self.isSpecialCard = param['IsSpecial']
         self.SpecialAbility = param['SpecialAbility']
         self.CardClass = param['Class']
+        self.CardOrder = random ()
