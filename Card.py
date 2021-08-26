@@ -8,19 +8,19 @@ from random import random
 
 class Card(object):
 
-    CardID = 0
-    CardType = 0
-    CardName = ""
-    CardCost = 0
-    MoneyEarned = 0
-    VPEarned = 0
-    CardStatus = 0
-    isUpgradable = 0
-    UpgrageValue = 0
-    isSpecialCard = 0
-    SpecialAbility = 0
-    CardClass = 0
-    CardOrder = 0
+    #CardID = 0
+    #CardType = 0
+    #CardName = ""
+    #CardCost = 0
+    #MoneyEarned = 0
+    #VPEarned = 0
+    #CardStatus = 0
+    #isUpgradable = 0
+    #UpgrageValue = 0
+    #isSpecialCard = 0
+    #SpecialAbility = 0
+    #CardClass = 0
+    #CardOrder = 0
 
 
     def __init__(self, param):
@@ -33,7 +33,8 @@ class Card(object):
         self.CardStatus = param['Status']
         self.isUpgradable = param['IsUpgradable']
         self.UpgrageValue = param['Upgrade Value']
-        self.isSpecialCard = param['IsSpecial']
+        self.isSpecialCard = param['IsSpecialCard']
         self.SpecialAbility = param['SpecialAbility']
         self.CardClass = param['Class']
+        self.CardDiscount = 0
         self.CardOrder = random ()

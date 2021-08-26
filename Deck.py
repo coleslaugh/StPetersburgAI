@@ -10,17 +10,10 @@ from _ast import Lambda
 
 class Deck(object):
     
-    DeckType = 0
-    TopCard = 0
-    Cards = []
-
-
     def __init__(self, CardDefs, DeckType):
-        '''
-        Constructor
-        '''
         x = 0
         i = 0
+        self.Cards = []
         self.DeckType = DeckType
         self.TopCard = 0
 
@@ -30,10 +23,12 @@ class Deck(object):
                 self.Cards.append(Card(x[0]))
                 i += 1
                 
+
     def Shuffle (self):
         self.Cards.sort(key=lambda s: s.CardOrder, reverse=False)
         
                
+    
     def GetCardNames (self):
         for x in self.Cards :
             print (x.CardName)
