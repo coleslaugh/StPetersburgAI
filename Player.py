@@ -5,6 +5,7 @@ Created on Aug 25, 2021
 '''
 
 class Player(object):
+   
     
     def __init__(self, Color, Money, Score, Marker):
         self.Color = Color
@@ -13,18 +14,17 @@ class Player(object):
         self.Marker = Marker
         self.Hand = []
         
-        
-    def BuyCard(self, CardToBuy):
+    def BuyCard(self, card_to_buy):
         return 
     
-    def HoldCard(self, CardToHold):
+    def HoldCard(self, card_to_hold):
         return 
     
     def Pass (self):
         return 
     
-    def UseCardAbility (self, CardWithAbility):
+    def UseCardAbility (self, card_with_ability):
         return 
     
-    def DetermineAction(self, CardsInPlay):
+    def DetermineAction(self, cards_in_play):
         return 

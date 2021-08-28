@@ -7,21 +7,7 @@ from random import random
 
 
 class Card(object):
-
-    #CardID = 0
-    #CardType = 0
-    #CardName = ""
-    #CardCost = 0
-    #MoneyEarned = 0
-    #VPEarned = 0
-    #CardStatus = 0
-    #isUpgradable = 0
-    #UpgrageValue = 0
-    #isSpecialCard = 0
-    #SpecialAbility = 0
-    #CardClass = 0
-    #CardOrder = 0
-
+    
 
     def __init__(self, param):
         self.CardID = param['ID']

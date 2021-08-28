@@ -3,12 +3,13 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
-from Card import *
+from Card import Card
 from _ast import Lambda
 
 
 
 class Deck(object):
+    
     
     def __init__(self, CardDefs, DeckType):
         x = 0
@@ -27,8 +28,6 @@ class Deck(object):
     def Shuffle (self):
         self.Cards.sort(key=lambda s: s.CardOrder, reverse=False)
         
-               
-    
     def GetCardNames (self):
         for x in self.Cards :
             print (x.CardName)

@@ -3,47 +3,46 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
-from Game import *
-from Card import *
-from Contents import *
+from Game import Game
+from Contents import (  WORKER_CARD_TYPE, PHASE_WORKER,
+                        BUILDING_CARD_TYPE, PHASE_BUILDING,
+                        ARISTOCRAT_CARD_TYPE, PHASE_ARISTOCRAT,
+                        TRADING_CARD_TYPE, PHASE_TRADING)
+                        
 
-new_game = Game (1)
+if __name__ == "__main__":
+    new_game = Game (1)
+    new_game.GameSetup()
 
-
-new_game.GameSetup()
-
-
-while not new_game.EndOfGame :
+    while not new_game.EndOfGame :
     
-    new_game.DealCards(WORKER_CARD_TYPE)
-    new_game.ProcessPhaseActions(PHASE_WORKER)
-    new_game.ProcessPhaseScoring(PHASE_WORKER)
+        new_game.DealCards(WORKER_CARD_TYPE)
+        new_game.ProcessPhaseActions(PHASE_WORKER)
+        new_game.ProcessPhaseScoring(PHASE_WORKER)
     
-    new_game.DealCards (BUILDING_CARD_TYPE)
-    new_game.ProcessPhaseActions(PHASE_BUILDING)
-    new_game.ProcessPhaseScoring(PHASE_BUILDING)
+        new_game.DealCards (BUILDING_CARD_TYPE)
+        new_game.ProcessPhaseActions(PHASE_BUILDING)
+        new_game.ProcessPhaseScoring(PHASE_BUILDING)
     
-    new_game.DealCards (ARISTOCRAT_CARD_TYPE)
-    new_game.ProcessPhaseActions(PHASE_ARISTOCRAT)
-    new_game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
+        new_game.DealCards (ARISTOCRAT_CARD_TYPE)
+        new_game.ProcessPhaseActions(PHASE_ARISTOCRAT)
+        new_game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
     
-    new_game.DealCards (TRADING_CARD_TYPE)
-    new_game.ProcessPhaseActions(PHASE_TRADING)
+        new_game.DealCards (TRADING_CARD_TYPE)
+        new_game.ProcessPhaseActions(PHASE_TRADING)
     
-    new_game.RotateCards ()
-    new_game.RotatePlayers ()
-    
-    
-    
-    
+        new_game.RotateCards ()
+        new_game.RotatePlayers ()
+        # Delete this line when running the game
+        new_game.EndOfGame = True
     
 
-print("Displaying Player Order")
+    print("Displaying Player Order")
 
-print(new_game.Players[0].Marker)
-print(new_game.Players[1].Marker)
-print(new_game.Players[2].Marker)
-print(new_game.Players[3].Marker)
+    print(new_game.Players[0].Marker)
+    print(new_game.Players[1].Marker)
+    print(new_game.Players[2].Marker)
+    print(new_game.Players[3].Marker)
 
 '''
 print("Displaying Worker Deck")
