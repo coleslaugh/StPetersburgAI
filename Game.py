@@ -5,6 +5,9 @@ Created on Aug 25, 2021
 '''
 from random import random
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+from Board import Board
 from Deck import Deck
 from Contents import (  PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED, 
                         PLAYERS_PER_GAME, WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, 
@@ -13,9 +16,6 @@ from Contents import (  PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED,
                         PLAYER_MARKER_TRADING, PLAYER_MARKER_BUIDLING, 
                         PLAYER_MARKER_WORKER, MAX_CARDS_ON_BOARD)
 from Player import Player
-
-
-
 
 class Game(object):
 
@@ -28,12 +28,13 @@ class Game(object):
         self.Players = []
         self.EndOfGame = False
         self.NumPlayers = PLAYERS_PER_GAME
-        #Board = Board ()
+        self.GameBoard = Board ()
                 
     def GameSetup (self):
         self.CreateDecks()
         self.CreatePlayers()
         self.AssignMarkers()
+        self.GameBoard.Display()
         
     def CreatePlayers (self):   
         self.Players.append(Player(PLAYER_GREEN, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 0))
@@ -84,7 +85,7 @@ class Game(object):
     def ProcessPhaseActions (self, Phase):
         for x in range(len(self.Players)) :
             print ("processing Action: ")
-            print(self.Players[x])
+            self.Players[x].DetermineAction()
 
             #PlayerAction = []  # [Action, Card]
             #PlayerAction = self.Players[x].DetermineAction (self.CardsInPlay)
