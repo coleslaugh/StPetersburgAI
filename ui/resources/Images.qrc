@@ -2,4 +2,5 @@
   <qresource prefix="Board">
     <file>board.png</file>
   </qresource>
+  <qresource prefix="Cards"/>
 </RCC>

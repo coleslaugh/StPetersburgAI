@@ -143,6 +143,15 @@ class Ui_MainWindow(object):
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
         self.label_10.setGeometry(QtCore.QRect(291, 507, 151, 19))
         self.label_10.setObjectName("label_10")
+        self.btnStart = QtWidgets.QPushButton(self.centralwidget)
+        self.btnStart.setGeometry(QtCore.QRect(160, 30, 111, 23))
+        self.btnStart.setObjectName("btnStart")
+        self.lineNumGames = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineNumGames.setGeometry(QtCore.QRect(20, 30, 51, 20))
+        self.lineNumGames.setObjectName("lineNumGames")
+        self.label_11 = QtWidgets.QLabel(self.centralwidget)
+        self.label_11.setGeometry(QtCore.QRect(20, 10, 111, 16))
+        self.label_11.setObjectName("label_11")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 21))
@@ -167,6 +176,8 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "Aristocrat Deck"))
         self.label_9.setText(_translate("MainWindow", "Trading Deck"))
         self.label_10.setText(_translate("MainWindow", "Game Status"))
+        self.btnStart.setText(_translate("MainWindow", "Start Learning"))
+        self.label_11.setText(_translate("MainWindow", "Number of Games"))
 import Images_rc
 
 

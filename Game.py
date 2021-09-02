@@ -4,10 +4,10 @@ Created on Aug 25, 2021
 @author: mikes
 '''
 from random import random
+import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from Board import Board
 from Deck import Deck
 from Contents import (  PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED, 
                         PLAYERS_PER_GAME, WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, 
@@ -28,13 +28,12 @@ class Game(object):
         self.Players = []
         self.EndOfGame = False
         self.NumPlayers = PLAYERS_PER_GAME
-        self.GameBoard = Board ()
                 
     def GameSetup (self):
         self.CreateDecks()
         self.CreatePlayers()
         self.AssignMarkers()
-        self.GameBoard.Display()
+
         
     def CreatePlayers (self):   
         self.Players.append(Player(PLAYER_GREEN, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 0))
