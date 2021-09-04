@@ -161,8 +161,12 @@ MISTRESS_OF_CEREMONIES_VP = 3
 #--------------------------------------------------------------------------
 PLAYER_ACTIVE_CARD = 0
 PLAYER_HELD_CARD = 1
+
+#--------------------------------------------------------------------------
+# Row Position
+#--------------------------------------------------------------------------
 BOARD_UPPER_ROW = 0
-BOARD_LOWER_ROW = -1
+BOARD_LOWER_ROW = 1
 
 #--------------------------------------------------------------------------
 # Special Card
@@ -269,10 +273,16 @@ ARISTOCRAT_SCORING = [1,3,6,10,15,21,28,36,45,55]
 
 PLAYERS_PER_GAME = 4
 
+PLAYER_1 = 0
+PLAYER_2 = 1
+PLAYER_3 = 2
+PLAYER_4 = 4
+
 PLAYER_GREEN = 0
 PLAYER_BLUE = 1
 PLAYER_YELLOW = 2
 PLAYER_RED = 3
+
 
 PLAYER_STARTING_MONEY = 25
 PLAYER_STARTING_SCORE = 0
@@ -286,6 +296,7 @@ PHASE_BUILDING = 1
 PHASE_ARISTOCRAT = 2
 PHASE_TRADING = 3
 
+
 ACTION_BUY = 0
 ACTION_HOLD = 1
 ACTION_PASS =2
@@ -293,4 +304,10 @@ ACTION_PASS =2
 
 MAX_CARDS_ON_BOARD = 8
 
-
+#--------------------------------------------------------------------------
+# Friendly Names
+#--------------------------------------------------------------------------
+PLAYERS = [[PLAYER_1, "Player 1"], [PLAYER_2, "Player 2"], [PLAYER_3, "Player 3"], [PLAYER_4, "Player 4"]]
+PLAYER_COLORS = [[PLAYER_GREEN, "Green"], [PLAYER_BLUE, "Blue"], [PLAYER_YELLOW, "Yellow"], [PLAYER_RED, "Red"]]
+PHASES = [[PHASE_WORKER, "Worker Phase"], [PHASE_BUILDING, "Building Phase"], [PHASE_ARISTOCRAT, "Aristocrat Phase"], [PHASE_TRADING, "Trading Card Phase"]]
+ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"]]

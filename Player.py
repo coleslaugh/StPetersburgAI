@@ -3,11 +3,14 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
+from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY
+from random import randint
 
 class Player(object):
    
     
-    def __init__(self, Color, Money, Score, Marker):
+    def __init__(self, ID, Color, Money, Score, Marker):
+        self.ID = ID
         self.Color = Color
         self.Money = Money
         self.Score = Score
@@ -15,10 +18,12 @@ class Player(object):
         self.Hand = []
         
     def BuyCard(self, card_to_buy):
-        return 
+        card_to_buy.CardStatus = PLAYER_ACTIVE_CARD
+        self.Hand.append(card_to_buy)
     
     def HoldCard(self, card_to_hold):
-        return 
+        card_to_hold.CardStatus = PLAYER_HELD_CARD
+        self.Hand.append(card_to_hold)
     
     def Pass (self):
         return 
@@ -27,4 +32,6 @@ class Player(object):
         return 
     
     def DetermineAction(self, cards_in_play):
-        return 
+        selectedCard = randint(0, len(cards_in_play)-1)
+        
+        return ACTION_BUY, cards_in_play[selectedCard]

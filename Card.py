@@ -22,5 +22,6 @@ class Card(object):
         self.isSpecialCard = param['IsSpecialCard']
         self.SpecialAbility = param['SpecialAbility']
         self.CardClass = param['Class']
+        self.Row = 0
         self.CardDiscount = 0
         self.CardOrder = random ()

@@ -3,25 +3,27 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
-from Game import *
-from Card import *
-from Contents import WORKER_CARD_TYPE
+import sys
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
-new_game = Game (1)
-new_game.GameSetup()
-new_game.DealCards(WORKER_CARD_TYPE)
+class ListWidget(QListWidget):
+    def clicked(self, item):
+        QMessageBox.information(self, "ListWidget", "ListWidget: " + item.text())
 
 
-print("Displaying Worker Deck")
-for x in range (len(new_game.WorkerDeck.Cards)) :
-    print (new_game.WorkerDeck.Cards[x].CardOrder, new_game.WorkerDeck.Cards[x].CardName)   
-print("Displaying Building Deck")
-for x in range (len(new_game.BuildingDeck.Cards)) :
-    print (new_game.BuildingDeck.Cards[x].CardOrder, new_game.BuildingDeck.Cards[x].CardName)   
-print("Displaying Aristocrat Deck")
-for x in range (len(new_game.AristocratDeck.Cards)) :
-    print (new_game.AristocratDeck.Cards[x].CardOrder, new_game.AristocratDeck.Cards[x].CardName)   
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    listWidget = ListWidget()
 
-print("Displaying Cards in Play")    
-for x in range (len(new_game.CardsInPlay)) :
-    print (new_game.CardsInPlay[x].CardName)   
+    listWidget.resize(300, 120)
+    listWidget.addItem("Item 1")
+    listWidget.addItem("Item 2")
+    listWidget.addItem("Item 3")
+    listWidget.addItem("Item 4")
+    listWidget.setWindowTitle('QListwidget Example')
+    listWidget.itemClicked.connect(listWidget.clicked)
+
+    listWidget.show()
+    sys.exit(app.exec_())
