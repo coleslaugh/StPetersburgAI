@@ -17,7 +17,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>400</x>
       <y>30</y>
       <width>691</width>
       <height>471</height>
@@ -39,320 +39,266 @@
      <pixmap resource="resources/Images.qrc">:/Board/board.png</pixmap>
     </property>
    </widget>
-   <widget class="QListView" name="listPlayer_Cards_1">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>250</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="Card_Upper_1">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>450</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_2">
     <property name="geometry">
      <rect>
-      <x>415</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>525</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_3">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>600</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_4">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>680</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_5">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>750</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_6">
     <property name="geometry">
      <rect>
-      <x>715</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>825</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_7">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>900</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Upper_8">
     <property name="geometry">
      <rect>
-      <x>865</x>
-      <y>260</y>
-      <width>71</width>
-      <height>91</height>
+      <x>975</x>
+      <y>255</y>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>111</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Player 1 Cards</string>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_1">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>450</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_2">
     <property name="geometry">
      <rect>
-      <x>415</x>
+      <x>525</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_3">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>600</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_4">
     <property name="geometry">
      <rect>
-      <x>570</x>
+      <x>680</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_5">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>750</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_6">
     <property name="geometry">
      <rect>
-      <x>715</x>
+      <x>825</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_7">
     <property name="geometry">
      <rect>
-      <x>790</x>
+      <x>900</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Card_Lower_8">
     <property name="geometry">
      <rect>
-      <x>865</x>
+      <x>975</x>
       <y>360</y>
-      <width>71</width>
-      <height>91</height>
+      <width>70</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
-   </widget>
-   <widget class="QListView" name="listPlayer_Cards_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>230</y>
-      <width>250</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListView" name="listPlayer_Cards_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>380</y>
-      <width>250</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListView" name="listPlayer_Cards_4">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>530</y>
-      <width>250</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>210</y>
-      <width>111</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Player 2 Cards</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>360</y>
-      <width>111</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Player 3 Cards</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>510</y>
-      <width>111</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Player 4 Cards</string>
-    </property>
-   </widget>
-   <widget class="QListView" name="listDeck_Worker">
-    <property name="geometry">
-     <rect>
-      <x>1000</x>
-      <y>80</y>
-      <width>256</width>
-      <height>125</height>
-     </rect>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1110</x>
       <y>60</y>
       <width>111</width>
       <height>19</height>
@@ -365,7 +311,7 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1110</x>
       <y>210</y>
       <width>111</width>
       <height>19</height>
@@ -375,20 +321,10 @@
      <string>Building Deck</string>
     </property>
    </widget>
-   <widget class="QListView" name="listDeck_Building">
-    <property name="geometry">
-     <rect>
-      <x>1000</x>
-      <y>230</y>
-      <width>256</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1110</x>
       <y>360</y>
       <width>111</width>
       <height>19</height>
@@ -398,30 +334,10 @@
      <string>Aristocrat Deck</string>
     </property>
    </widget>
-   <widget class="QListView" name="listDeck_Aristocrat">
-    <property name="geometry">
-     <rect>
-      <x>1000</x>
-      <y>380</y>
-      <width>256</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListView" name="listDeck_Trading">
-    <property name="geometry">
-     <rect>
-      <x>1000</x>
-      <y>530</y>
-      <width>256</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1110</x>
       <y>510</y>
       <width>111</width>
       <height>19</height>
@@ -431,20 +347,10 @@
      <string>Trading Deck</string>
     </property>
    </widget>
-   <widget class="QListView" name="listStatus">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>529</y>
-      <width>691</width>
-      <height>125</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>291</x>
+      <x>401</x>
       <y>507</y>
       <width>151</width>
       <height>19</height>
@@ -457,9 +363,9 @@
    <widget class="QPushButton" name="btnStart">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>80</x>
       <y>30</y>
-      <width>111</width>
+      <width>301</width>
       <height>23</height>
      </rect>
     </property>
@@ -489,6 +395,483 @@
     <property name="text">
      <string>Number of Games</string>
     </property>
+   </widget>
+   <widget class="QListWidget" name="listStatus">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>530</y>
+      <width>531</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listDeck_Worker">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>80</y>
+      <width>150</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listDeck_Building">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>230</y>
+      <width>150</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listDeck_Aristocrat">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>380</y>
+      <width>150</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listDeck_Trading">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>530</y>
+      <width>150</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxPlayer1">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>371</width>
+      <height>145</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Player 1</string>
+    </property>
+    <widget class="QLabel" name="lblColor_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPhaseLeader_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Phase Leader: </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblMoney_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Money:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblVP_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>70</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Victory Points</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblAristocrats_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Unique Aristrocrats:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblHeldCards_Player1">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>110</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Held Cards</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listCards_Player1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>15</y>
+       <width>170</width>
+       <height>120</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>510</y>
+      <width>151</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cards in Play</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listCardsInPlay">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>530</y>
+      <width>150</width>
+      <height>125</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxPlayer1_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>371</width>
+      <height>145</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Player 2</string>
+    </property>
+    <widget class="QLabel" name="lblColor_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPhaseLeader_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Phase Leader: </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblMoney_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Money:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblVP_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>70</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Victory Points</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblAristocrats_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Unique Aristrocrats:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblHeldCards_Player2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>110</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Held Cards</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listCards_Player2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>15</y>
+       <width>170</width>
+       <height>120</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxPlayer1_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>360</y>
+      <width>371</width>
+      <height>145</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Player 3</string>
+    </property>
+    <widget class="QLabel" name="lblColor_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPhaseLeader_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Phase Leader: </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblMoney_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Money:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblVP_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>70</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Victory Points</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblAristocrats_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Unique Aristrocrats:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblHeldCards_Player3">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>110</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Held Cards</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listCards_Player3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>15</y>
+       <width>170</width>
+       <height>120</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxPlayer1_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>371</width>
+      <height>145</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Player 4</string>
+    </property>
+    <widget class="QLabel" name="lblColor_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblPhaseLeader_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Phase Leader: </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblMoney_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Money:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblVP_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>70</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Victory Points</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblAristocrats_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Unique Aristrocrats:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblHeldCards_Player4">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>110</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Held Cards</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listCards_Player4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>15</y>
+       <width>170</width>
+       <height>120</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
