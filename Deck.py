@@ -23,7 +23,6 @@ class Deck(object):
             while i < x[1] :
                 self.Cards.append(Card(x[0]))
                 i += 1
-                
 
     def Shuffle (self):
         self.Cards.sort(key=lambda s: s.CardOrder, reverse=False)

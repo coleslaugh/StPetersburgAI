@@ -17,7 +17,7 @@ from Contents import (  PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4,
                         PLAYER_MARKER_TRADING, PLAYER_MARKER_BUIDLING, 
                         PLAYER_MARKER_WORKER, MAX_CARDS_ON_BOARD,
                         ACTION_BUY, ACTION_HOLD, ACTION_PASS,
-                        BOARD_UPPER_ROW, BOARD_LOWER_ROW)
+                        BOARD_UPPER_ROW, BOARD_LOWER_ROW, PLAYER_ACTIVE_CARD, PLAYERS, PHASES)
 from Player import Player
 
 class Game(object):
@@ -63,42 +63,76 @@ class Game(object):
         self.Players.sort(key=lambda s: s.Marker, reverse=False)
         
     def DealCards (self, GamePhase):
+        print ("Starting to Deal Cards for the " + PHASES[GamePhase][1] + " - Worker Deck Top Card:" + str(self.WorkerDeck.TopCard) + " Building Deck Top Card: " + str(self.BuildingDeck.TopCard) + " Aristocrat Deck Top Card: " + str(self.AristocratDeck.TopCard))
+        print ("Cards to deal: " + str(MAX_CARDS_ON_BOARD - len(self.CardsInPlay)))
+        CardsDelt = ""
         if GamePhase == WORKER_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                self.CardsInPlay.append(self.WorkerDeck.Cards[self.WorkerDeck.TopCard])
-                self.WorkerDeck.TopCard += 1
+                if self.WorkerDeck.TopCard < len (self.WorkerDeck.Cards) :
+                    self.CardsInPlay.append(self.WorkerDeck.Cards[self.WorkerDeck.TopCard])
+                    CardsDelt = CardsDelt + ", " + self.WorkerDeck.Cards[self.WorkerDeck.TopCard].CardName 
+                    self.WorkerDeck.TopCard += 1
+                if self.WorkerDeck.TopCard >= len (self.WorkerDeck.Cards) :
+                    self.EndOfGame = True
+                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " Worker Deck Empty. Game will Terminate at the end of the phase")
+                    return
         
         if GamePhase == BUILDING_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                self.CardsInPlay.append(self.BuildingDeck.Cards[self.BuildingDeck.TopCard])
-                self.BuildingDeck.TopCard += 1                
+                if self.BuildingDeck.TopCard < len (self.BuildingDeck.Cards) :
+                    self.CardsInPlay.append(self.BuildingDeck.Cards[self.BuildingDeck.TopCard])
+                    CardsDelt = CardsDelt + ", " + self.BuildingDeck.Cards[self.BuildingDeck.TopCard].CardName
+                    self.BuildingDeck.TopCard += 1
+                if self.BuildingDeck.TopCard >= len (self.BuildingDeck.Cards) :
+                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " Building Deck Empty. Game will Terminate at the end of the phase")
+                    self.EndOfGame = True
+                    return            
         
         if GamePhase == ARISTOCRAT_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                self.CardsInPlay.append(self.AristocratDeck.Cards[self.AristocratDeck.TopCard])
-                self.AristocratDeck.TopCard += 1   
-        return              
+                if self.AristocratDeck.TopCard < len (self.AristocratDeck.Cards) :
+                    self.CardsInPlay.append(self.AristocratDeck.Cards[self.AristocratDeck.TopCard])
+                    CardsDelt = CardsDelt + ", " + self.AristocratDeck.Cards[self.AristocratDeck.TopCard].CardName
+                    self.AristocratDeck.TopCard += 1
+                if self.AristocratDeck.TopCard >= len (self.AristocratDeck.Cards) :
+                    self.EndOfGame = True
+                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " Aristocrat Deck Empty. Game will Terminate at the end of the phase")
+                    return          
+        print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt)
+
 
     def ProcessPhaseActions (self, Phase):
-        for x in range(len(self.Players)) :
-            PlayerAction, SelectedCard = self.Players[x].DetermineAction(self.CardsInPlay)
+        for Player in self.Players :
+            PlayerAction, SelectedCard = Player.DetermineAction(self.CardsInPlay)
+            
             if PlayerAction == ACTION_BUY :
-                self.Players[x].BuyCard(SelectedCard)
-                self.CardsInPlay.remove(SelectedCard)
+                if Player.Money >= SelectedCard.CardCost :
+                    Player.BuyCard(SelectedCard)
+                    self.CardsInPlay.remove(SelectedCard)
+                    Player.Money -= SelectedCard.CardCost
+                    print  (PLAYERS[Player.ID][1] + " bought a " + SelectedCard.CardName + " for " + str(SelectedCard.CardCost) + " money. Player Remaining Money: " + str(Player.Money))
+                else :
+                    print  (PLAYERS[Player.ID][1] + " could not afford to buy a " + SelectedCard.CardName + ". Player Money: " + str(Player.Money) + " Card Cost: " + str(SelectedCard.CardCost))
                 
             if PlayerAction == ACTION_HOLD :
-                self.Players[x].HoldCard(SelectedCard)
+                Player.HoldCard(SelectedCard)
                 self.CardsInPlay.remove(SelectedCard)
-                
+                 
             if PlayerAction == ACTION_PASS :
-                self.Players[x].Pass()
+                Player.Pass()
             #PlayerAction = []  # [Action, Card]
             #PlayerAction = self.Players[x].DetermineAction (self.CardsInPlay)
         
 
     
     def ProcessPhaseScoring (self, Phase):
-        return
+        print("Scoring " + PHASES[Phase][1])
+        for Player in self.Players :
+            for Card in Player.Hand:
+                if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD):
+                    Player.Money += Card.MoneyEarned
+                    Player.Score += Card.VPEarned
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
     
     def RotateCards (self):
         for c in self.CardsInPlay :

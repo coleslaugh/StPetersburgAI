@@ -3,7 +3,7 @@ Created on Aug 25, 2021
 
 @author: mikes
 '''
-from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY
+from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PASS, PLAYERS
 from random import randint
 
 class Player(object):
@@ -20,6 +20,7 @@ class Player(object):
     def BuyCard(self, card_to_buy):
         card_to_buy.CardStatus = PLAYER_ACTIVE_CARD
         self.Hand.append(card_to_buy)
+        #print(PLAYERS[self.ID][1] + " bought a " + card_to_buy.CardName)
     
     def HoldCard(self, card_to_hold):
         card_to_hold.CardStatus = PLAYER_HELD_CARD
@@ -27,11 +28,15 @@ class Player(object):
     
     def Pass (self):
         return 
-    
+     
     def UseCardAbility (self, card_with_ability):
         return 
     
     def DetermineAction(self, cards_in_play):
-        selectedCard = randint(0, len(cards_in_play)-1)
         
-        return ACTION_BUY, cards_in_play[selectedCard]
+        #print(PLAYERS[self.ID][1] + " decided to by " + cards_in_play[selectedCard].CardName)
+        if len (cards_in_play) > 0 :
+            selectedCard = randint(0, len(cards_in_play)-1)
+            return ACTION_BUY, cards_in_play[selectedCard]
+        else :
+            return ACTION_PASS, None
