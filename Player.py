@@ -9,8 +9,9 @@ from random import randint
 class Player(object):
    
     
-    def __init__(self, ID, Color, Money, Score, Marker):
+    def __init__(self, ID, Name ,Color, Money, Score, Marker):
         self.ID = ID
+        self.Name = Name
         self.Color = Color
         self.Money = Money
         self.Score = Score

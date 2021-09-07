@@ -51,13 +51,14 @@ class Board(Ui_MainWindow):
        
     def StartButtonClick (self):
         self.ClearBoard()
-        print("Starting Game")
+        print("-------------------------------------------------------------Starting Game-------------------------------------------------------------")
         self.listStatus.addItem(QListWidgetItem("Creating Game"))
         self.New_Game = Game (1)
         self.listStatus.addItem(QListWidgetItem("Setting Up Game"))
         self.New_Game.GameSetup()
         self.listStatus.addItem(QListWidgetItem("Game Setup Complete"))
         self.AddDeckstoGameBoard()
+        self.RefreshPlayerIDs()
         self.RefreshPlayerColors()
         self.RefreshMoney()
         self.RefreshVictoryPoints()
@@ -73,6 +74,10 @@ class Board(Ui_MainWindow):
         self.listCards_Player2.clear()
         self.listCards_Player3.clear()
         self.listCards_Player4.clear()
+        self.groupBoxPlayer1.setTitle("Player 1")
+        self.groupBoxPlayer2.setTitle("Player 2")
+        self.groupBoxPlayer3.setTitle("Player 3")
+        self.groupBoxPlayer4.setTitle("Player 4")
         self.listCardsInPlay.clear()
         
     def AddDeckstoGameBoard (self):
@@ -89,6 +94,9 @@ class Board(Ui_MainWindow):
         for x in self.New_Game.AristocratDeck.Cards :
             self.listDeck_Aristocrat.addItem(QListWidgetItem(x.CardName))
             
+        self.listStatus.addItem(QListWidgetItem("Adding Trading Deck to Board"))
+        for x in self.New_Game.TradingDeck.Cards :
+            self.listDeck_Trading.addItem(QListWidgetItem(x.CardName))
     def RefreshPlayerHands(self):
         
         #Clear the Player List Widgets before adding the cards again
@@ -114,6 +122,12 @@ class Board(Ui_MainWindow):
         self.lblColor_Player2.setText("Color: " + PLAYER_COLORS [self.New_Game.Players[1].Color][1])
         self.lblColor_Player3.setText("Color: " + PLAYER_COLORS [self.New_Game.Players[2].Color][1])
         self.lblColor_Player4.setText("Color: " + PLAYER_COLORS [self.New_Game.Players[3].Color][1])
+    
+    def RefreshPlayerIDs (self):
+        self.groupBoxPlayer1.setTitle("PLayer 1 - " + self.New_Game.Players[0].Name + " ID: " + str(self.New_Game.Players[0].ID))
+        self.groupBoxPlayer2.setTitle("PLayer 2 - " + self.New_Game.Players[1].Name + " ID: " + str(self.New_Game.Players[1].ID))
+        self.groupBoxPlayer3.setTitle("PLayer 3 - " + self.New_Game.Players[2].Name + " ID: " + str(self.New_Game.Players[2].ID))
+        self.groupBoxPlayer4.setTitle("PLayer 4 - " + self.New_Game.Players[3].Name + " ID: " + str(self.New_Game.Players[3].ID))
     
     def RefreshPlayerPhases(self):
         
@@ -195,11 +209,12 @@ class Board(Ui_MainWindow):
             self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT)
             self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
     
-            #self.New_Game.DealCards (TRADING_CARD_TYPE)
-            #self.New_Game.ProcessPhaseActions(PHASE_TRADING)
+            print("Starting Trading Phase")
+            self.New_Game.DealCards (TRADING_CARD_TYPE)
+            self.New_Game.ProcessPhaseActions(PHASE_TRADING)
     
             self.New_Game.RotateCards ()
-            #self.New_Game.DealCards(WORKER_CARD_TYPE)
+            self.New_Game.RotateMarkers ()
             self.RefreshBoard()
             #self.New_Game.RotatePlayers ()
             
@@ -208,7 +223,7 @@ class Board(Ui_MainWindow):
             self.listStatus.addItem(QListWidgetItem("Completed Phase "+ str(Phase_Count)))
             #if Phase_Count == Max_Phase :
             #    self.New_Game.EndOfGame = True    
-        print ("Completed Game")
+        print("------------------------------------------------------------- Game Completed -------------------------------------------------------------")
                   
 if __name__ == "__main__":
 

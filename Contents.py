@@ -44,6 +44,33 @@ CONTROLLER_ID = 21
 JUDGE_ID = 22
 MISTRESS_OF_CEREMONIES_ID = 23
 
+# Trading Cards
+CARPENTER_WORKSHOP_ID = 24
+GOLD_SMELTER_ID = 25
+WEAVING_MILL_ID = 26
+FUR_SHOP_ID = 27
+WHARF_ID = 28
+MARIINSKIJ_THEATER_ID = 29
+BANK_ID = 30
+PETERHOF_ID = 31
+ST_ISAAC_CATHEDRAL_ID = 32
+CHURCH_OF_JESUS_CHRIST_ID = 33
+HARBOR_ID = 34
+SMOLNY_CATHEDRAL_ID = 35
+CATHERINE_GREAT_PALACE_ID = 36
+HERMITAGE_ID = 37
+WINTER_PALACE_ID = 38
+POPE_ID = 39
+WEAPON_MASTER_ID = 40
+CHAMBER_MAID_ID = 41
+BUILDER_ID = 42
+SENATOR_ID = 43
+PATRIARCH_ID = 44
+TAX_MAN_ID = 45
+ADMIRAL_ID = 46
+MINISTER_OF_FA_ID = 47
+CZAR_ID = 48
+
 #--------------------------------------------------------------------------
 # Worker Card Class
 #--------------------------------------------------------------------------
@@ -90,6 +117,33 @@ CONTROLLER_COST = 14
 JUDGE_COST = 16
 MISTRESS_OF_CEREMONIES_COST = 18
 
+# Trading Cards
+CARPENTER_WORKSHOP_COST = 4
+GOLD_SMELTER_COST = 6
+WEAVING_MILL_COST = 8
+FUR_SHOP_COST = 10
+WHARF_COST = 12
+MARIINSKIJ_THEATER_COST = 10
+BANK_COST = 13
+PETERHOF_COST = 14
+ST_ISAAC_CATHEDRAL_COST = 15
+CHURCH_OF_JESUS_CHRIST_COST = 16
+HARBOR_COST = 16
+SMOLNY_CATHEDRAL_COST = 17
+CATHERINE_GREAT_PALACE_COST = 17
+HERMITAGE_COST = 18
+WINTER_PALACE_COST = 19
+POPE_COST = 6
+WEAPON_MASTER_COST = 8
+CHAMBER_MAID_COST = 8
+BUILDER_COST = 10
+SENATOR_COST = 12
+PATRIARCH_COST = 16
+TAX_MAN_COST = 17
+ADMIRAL_COST = 18
+MINISTER_OF_FA_COST = 20
+CZAR_COST = 24
+
 #--------------------------------------------------------------------------
 # Card Money Earned
 #-------------------------------------------------------------------------- 
@@ -121,6 +175,33 @@ SECRETARY_MONEY = 4
 CONTROLLER_MONEY = 4
 JUDGE_MONEY = 5
 MISTRESS_OF_CEREMONIES_MONEY = 6
+
+# Trading Cards
+CARPENTER_WORKSHOP_MONEY = 0
+GOLD_SMELTER_MONEY = 0
+WEAVING_MILL_MONEY = 6
+FUR_SHOP_MONEY = 3
+WHARF_MONEY = 6
+MARIINSKIJ_THEATER_MONEY = 0
+BANK_MONEY = 5
+PETERHOF_MONEY = 4
+ST_ISAAC_CATHEDRAL_MONEY = 3
+CHURCH_OF_JESUS_CHRIST_MONEY = 2
+HARBOR_MONEY = 5
+SMOLNY_CATHEDRAL_MONEY = 4
+CATHERINE_GREAT_PALACE_MONEY = 1
+HERMITAGE_MONEY = 3
+WINTER_PALACE_MONEY = 2
+POPE_MONEY = 1
+WEAPON_MASTER_MONEY = 4
+CHAMBER_MAID_MONEY = 0
+BUILDER_MONEY = 5
+SENATOR_MONEY = 2
+PATRIARCH_MONEY = 0
+TAX_MAN_MONEY = 0
+ADMIRAL_MONEY = 3
+MINISTER_OF_FA_MONEY = 2
+CZAR_MONEY = 0
 
 #--------------------------------------------------------------------------
 # Victory Points Earned
@@ -154,7 +235,32 @@ CONTROLLER_VP = 1
 JUDGE_VP = 2
 MISTRESS_OF_CEREMONIES_VP = 3
 
-
+# Trading Cards
+CARPENTER_WORKSHOP_VP = 0
+GOLD_SMELTER_VP = 0
+WEAVING_MILL_VP = 0
+FUR_SHOP_VP = 2
+WHARF_VP = 1
+MARIINSKIJ_THEATER_VP = 0
+BANK_VP = 1
+PETERHOF_VP = 2
+ST_ISAAC_CATHEDRAL_VP = 3
+CHURCH_OF_JESUS_CHRIST_VP = 4
+HARBOR_VP = 2
+SMOLNY_CATHEDRAL_VP = 3
+CATHERINE_GREAT_PALACE_VP = 5
+HERMITAGE_VP = 4
+WINTER_PALACE_VP = 5
+POPE_VP = 1
+WEAPON_MASTER_VP = 0
+CHAMBER_MAID_VP = 2
+BUILDER_VP = 0
+SENATOR_VP = 2
+PATRIARCH_VP = 4
+TAX_MAN_VP = 0
+ADMIRAL_VP = 3
+MINISTER_OF_FA_VP = 4
+CZAR_VP = 6
 
 #--------------------------------------------------------------------------
 # Card Status
@@ -193,6 +299,7 @@ PUB_ABILITY = 4
 CZAR_PETER_ABILITY = 5
 OBSERVATORY_ABILITY = 6
 MARIINSKIJ_THEATER_ABILITY = 7
+CARPENTER_WORKSHOP_ABILITY = 8
 
 POTJOMKINS_VILLAGE_UPGRADE_VALUE = 6
 
@@ -200,33 +307,55 @@ POTJOMKINS_VILLAGE_UPGRADE_VALUE = 6
 # Cards
 #--------------------------------------------------------------------------
 
-LUMBERJACK_CARD =               {'ID': LUMBERJACK_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': 'Lumber Jack',              'Cost': LUMBERJACK_COST,                'Money': LUMBERJACK_MONEY,              'VP': LUMBERJACK_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': LUMBERJACK_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_WOOD}
-GOLD_MINER_CARD =               {'ID': GOLD_MINER_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': "Gold Miner",               'Cost': GOLD_MINER_COST,                'Money': GOLD_MINER_MONEY,              'VP': GOLD_MINER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': GOLD_MINER_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_GOLD}
-SHEPHERD_CARD =                 {'ID': SHEPHERD_ID,                 'Card Type': WORKER_CARD_TYPE,      'Name': "Shepherd",                 'Cost': SHEPHERD_COST,                  'Money': SHEPHERD_MONEY,                'VP': SHEPHERD_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': SHEPHERD_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_WOOL}
-FUR_TRAPPER_CARD =              {'ID': FUR_TRAPPER_ID,              'Card Type': WORKER_CARD_TYPE,      'Name': "Fur Trapper",              'Cost': FUR_TRAPPER_COST,               'Money': FUR_TRAPPER_MONEY,             'VP': FUR_TRAPPER_VP,               'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': FUR_TRAPPER_COST,                  'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_FUR}
-SHIP_BUILDER_CARD =             {'ID': SHIP_BUILDER_ID,             'Card Type': WORKER_CARD_TYPE,      'Name': "Ship Builder",             'Cost': SHIP_BUILDER_COST,              'Money': SHIP_BUILDER_MONEY,            'VP': SHIP_BUILDER_VP,              'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': SHIP_BUILDER_COST,                 'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_SHIP}
-CZAR_PETER_CARD =               {'ID': CZAR_PETER_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': "Czar Peter",               'Cost': CZAR_PETER_COST,                'Money': CZAR_PETER_MONEY,              'VP': CZAR_PETER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': CZAR_PETER_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_ALL}
-MARKET_CARD =                   {'ID': MARKET_ID,                   'Card Type': BUILDING_CARD_TYPE,    'Name': "Market",                   'Cost': MARKET_COST,                    'Money': MARKET_MONEY,                  'VP': MARKET_VP,                    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': MARKET_COST,                       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-CUSTOMS_HOUSE_CARD =            {'ID': CUSTOMS_HOUSE_ID,            'Card Type': BUILDING_CARD_TYPE,    'Name': "Customs House",            'Cost': CUSTOMS_HOUSE_COST,             'Money': CUSTOMS_HOUSE_MONEY,           'VP': CUSTOMS_HOUSE_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': CUSTOMS_HOUSE_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-FIREHOUSE_CARD =                {'ID': FIREHOUSE_ID,                'Card Type': BUILDING_CARD_TYPE,    'Name': "Firehouse",                'Cost': FIREHOUSE_COST,                 'Money': FIREHOUSE_MONEY,               'VP': FIREHOUSE_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': FIREHOUSE_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-HOSPITAL_CARD =                 {'ID': HOSPITAL_ID,                 'Card Type': BUILDING_CARD_TYPE,    'Name': "Hospital",                 'Cost': HOSPITAL_COST,                  'Money': HOSPITAL_MONEY,                'VP': HOSPITAL_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': HOSPITAL_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-LIBRARY_CARD =                  {'ID': LIBRARY_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Library",                  'Cost': LIBRARY_COST,                   'Money': LIBRARY_MONEY,                 'VP': LIBRARY_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': LIBRARY_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-THEATER_CARD =                  {'ID': THEATER_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Theater",                  'Cost': THEATER_COST,                   'Money': THEATER_MONEY,                 'VP': THEATER_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': THEATER_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-ACADEMY_CARD =                  {'ID': ACADEMY_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Academy",                  'Cost': ACADEMY_COST,                   'Money': ACADEMY_MONEY,                 'VP': ACADEMY_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': ACADEMY_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-POTJOMKINS_VILLAGE_CARD =       {'ID': POTJOMKINS_VILLAGE_ID,       'Card Type': BUILDING_CARD_TYPE,    'Name': "Potjomkins Village",       'Cost': POTJOMKINS_VILLAGE_COST,        'Money': POTJOMKINS_VILLAGE_MONEY,      'VP': POTJOMKINS_VILLAGE_VP,        'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': POTJOMKINS_VILLAGE_UPGRADE_VALUE,  'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': POTJOMKINS_VILLIAGE_ABILITY,  'Class': CLASS_NONE}
-PUB_CARD =                      {'ID': PUB_ID,                      'Card Type': BUILDING_CARD_TYPE,    'Name': "Pub",                      'Cost': PUB_COST,                       'Money': PUB_MONEY,                     'VP': PUB_VP,                       'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': PUB_COST,                          'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': PUB_ABILITY,                  'Class': CLASS_NONE}
-WAREHOUSE_CARD =                {'ID': WAREHOUSE_ID,                'Card Type': BUILDING_CARD_TYPE,    'Name': "Warehouse",                'Cost': WAREHOUSE_COST,                 'Money': WAREHOUSE_MONEY,               'VP': WAREHOUSE_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': WAREHOUSE_COST,                    'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': WAREHOUSE_ABILITY,            'Class': CLASS_NONE}
-OBSERVATORY_CARD =              {'ID': OBSERVATORY_ID,              'Card Type': BUILDING_CARD_TYPE,    'Name': "Observatory",              'Cost': OBSERVATORY_COST,               'Money': OBSERVATORY_MONEY,             'VP': OBSERVATORY_VP,               'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': OBSERVATORY_COST,                  'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': OBSERVATORY_ABILITY,          'Class': CLASS_NONE}
-AUTHOR_CARD =                   {'ID': AUTHOR_ID,                   'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Author",                   'Cost': AUTHOR_COST,                    'Money': AUTHOR_MONEY,                  'VP': AUTHOR_VP,                    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': AUTHOR_COST,                       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-ADMINISTRATOR_CARD =            {'ID': ADMINISTRATOR_ID,            'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Administrator",            'Cost': ADMINISTRATOR_COST,             'Money': ADMINISTRATOR_MONEY,           'VP': ADMINISTRATOR_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': ADMINISTRATOR_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-WAREHOUSE_MANAGER_CARD =        {'ID': WAREHOUSE_MANAGER_ID,        'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Warehouse Manager",        'Cost': WAREHOUSE_MANAGER_COST,         'Money': WAREHOUSE_MANAGER_MONEY,       'VP': WAREHOUSE_MANAGER_VP,         'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': WAREHOUSE_MANAGER_COST,            'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-SECRETARY_CARD =                {'ID': SECRETARY_ID,                'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Secretary",                'Cost': SECRETARY_COST,                 'Money': SECRETARY_MONEY,               'VP': SECRETARY_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': SECRETARY_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-CONTROLLER_CARD =               {'ID': CONTROLLER_ID,               'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Controller",               'Cost': CONTROLLER_COST,                'Money': CONTROLLER_MONEY,              'VP': CONTROLLER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': CONTROLLER_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-JUDGE_CARD =                    {'ID': JUDGE_ID,                    'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Judge",                    'Cost': JUDGE_COST,                     'Money': JUDGE_MONEY,                   'VP': JUDGE_VP,                     'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': JUDGE_COST,                        'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-MISTRESS_OF_CEREMONIES_CARD =   {'ID': MISTRESS_OF_CEREMONIES_ID,   'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Mistress of Ceremonies",   'Cost': MISTRESS_OF_CEREMONIES_COST,    'Money': MISTRESS_OF_CEREMONIES_MONEY,  'VP': MISTRESS_OF_CEREMONIES_VP,    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,  'Upgrade Value': MISTRESS_OF_CEREMONIES_COST,       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
-
-
-
+LUMBERJACK_CARD =               {'ID': LUMBERJACK_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': 'Lumber Jack',                  'Cost': LUMBERJACK_COST,                'Money': LUMBERJACK_MONEY,              'VP': LUMBERJACK_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': LUMBERJACK_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_WOOD}
+GOLD_MINER_CARD =               {'ID': GOLD_MINER_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': "Gold Miner",                   'Cost': GOLD_MINER_COST,                'Money': GOLD_MINER_MONEY,              'VP': GOLD_MINER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': GOLD_MINER_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_GOLD}
+SHEPHERD_CARD =                 {'ID': SHEPHERD_ID,                 'Card Type': WORKER_CARD_TYPE,      'Name': "Shepherd",                     'Cost': SHEPHERD_COST,                  'Money': SHEPHERD_MONEY,                'VP': SHEPHERD_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': SHEPHERD_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_WOOL}
+FUR_TRAPPER_CARD =              {'ID': FUR_TRAPPER_ID,              'Card Type': WORKER_CARD_TYPE,      'Name': "Fur Trapper",                  'Cost': FUR_TRAPPER_COST,               'Money': FUR_TRAPPER_MONEY,             'VP': FUR_TRAPPER_VP,               'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': FUR_TRAPPER_COST,                  'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_FUR}
+SHIP_BUILDER_CARD =             {'ID': SHIP_BUILDER_ID,             'Card Type': WORKER_CARD_TYPE,      'Name': "Ship Builder",                 'Cost': SHIP_BUILDER_COST,              'Money': SHIP_BUILDER_MONEY,            'VP': SHIP_BUILDER_VP,              'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': SHIP_BUILDER_COST,                 'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_SHIP}
+CZAR_PETER_CARD =               {'ID': CZAR_PETER_ID,               'Card Type': WORKER_CARD_TYPE,      'Name': "Czar Peter",                   'Cost': CZAR_PETER_COST,                'Money': CZAR_PETER_MONEY,              'VP': CZAR_PETER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': CZAR_PETER_COST,                   'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': CZAR_PETER_ABILITY,           'Class': CLASS_ALL}
+MARKET_CARD =                   {'ID': MARKET_ID,                   'Card Type': BUILDING_CARD_TYPE,    'Name': "Market",                       'Cost': MARKET_COST,                    'Money': MARKET_MONEY,                  'VP': MARKET_VP,                    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': MARKET_COST,                       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CUSTOMS_HOUSE_CARD =            {'ID': CUSTOMS_HOUSE_ID,            'Card Type': BUILDING_CARD_TYPE,    'Name': "Customs House",                'Cost': CUSTOMS_HOUSE_COST,             'Money': CUSTOMS_HOUSE_MONEY,           'VP': CUSTOMS_HOUSE_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': CUSTOMS_HOUSE_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+FIREHOUSE_CARD =                {'ID': FIREHOUSE_ID,                'Card Type': BUILDING_CARD_TYPE,    'Name': "Firehouse",                    'Cost': FIREHOUSE_COST,                 'Money': FIREHOUSE_MONEY,               'VP': FIREHOUSE_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': FIREHOUSE_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+HOSPITAL_CARD =                 {'ID': HOSPITAL_ID,                 'Card Type': BUILDING_CARD_TYPE,    'Name': "Hospital",                     'Cost': HOSPITAL_COST,                  'Money': HOSPITAL_MONEY,                'VP': HOSPITAL_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': HOSPITAL_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+LIBRARY_CARD =                  {'ID': LIBRARY_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Library",                      'Cost': LIBRARY_COST,                   'Money': LIBRARY_MONEY,                 'VP': LIBRARY_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': LIBRARY_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+THEATER_CARD =                  {'ID': THEATER_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Theater",                      'Cost': THEATER_COST,                   'Money': THEATER_MONEY,                 'VP': THEATER_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': THEATER_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+ACADEMY_CARD =                  {'ID': ACADEMY_ID,                  'Card Type': BUILDING_CARD_TYPE,    'Name': "Academy",                      'Cost': ACADEMY_COST,                   'Money': ACADEMY_MONEY,                 'VP': ACADEMY_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': ACADEMY_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+POTJOMKINS_VILLAGE_CARD =       {'ID': POTJOMKINS_VILLAGE_ID,       'Card Type': BUILDING_CARD_TYPE,    'Name': "Potjomkins Village",           'Cost': POTJOMKINS_VILLAGE_COST,        'Money': POTJOMKINS_VILLAGE_MONEY,      'VP': POTJOMKINS_VILLAGE_VP,        'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': POTJOMKINS_VILLAGE_UPGRADE_VALUE,  'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': POTJOMKINS_VILLIAGE_ABILITY,  'Class': CLASS_NONE}
+PUB_CARD =                      {'ID': PUB_ID,                      'Card Type': BUILDING_CARD_TYPE,    'Name': "Pub",                          'Cost': PUB_COST,                       'Money': PUB_MONEY,                     'VP': PUB_VP,                       'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': PUB_COST,                          'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': PUB_ABILITY,                  'Class': CLASS_NONE}
+WAREHOUSE_CARD =                {'ID': WAREHOUSE_ID,                'Card Type': BUILDING_CARD_TYPE,    'Name': "Warehouse",                    'Cost': WAREHOUSE_COST,                 'Money': WAREHOUSE_MONEY,               'VP': WAREHOUSE_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': WAREHOUSE_COST,                    'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': WAREHOUSE_ABILITY,            'Class': CLASS_NONE}
+OBSERVATORY_CARD =              {'ID': OBSERVATORY_ID,              'Card Type': BUILDING_CARD_TYPE,    'Name': "Observatory",                  'Cost': OBSERVATORY_COST,               'Money': OBSERVATORY_MONEY,             'VP': OBSERVATORY_VP,               'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': OBSERVATORY_COST,                  'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': OBSERVATORY_ABILITY,          'Class': CLASS_NONE}
+AUTHOR_CARD =                   {'ID': AUTHOR_ID,                   'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Author",                       'Cost': AUTHOR_COST,                    'Money': AUTHOR_MONEY,                  'VP': AUTHOR_VP,                    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': AUTHOR_COST,                       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+ADMINISTRATOR_CARD =            {'ID': ADMINISTRATOR_ID,            'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Administrator",                'Cost': ADMINISTRATOR_COST,             'Money': ADMINISTRATOR_MONEY,           'VP': ADMINISTRATOR_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': ADMINISTRATOR_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+WAREHOUSE_MANAGER_CARD =        {'ID': WAREHOUSE_MANAGER_ID,        'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Warehouse Manager",            'Cost': WAREHOUSE_MANAGER_COST,         'Money': WAREHOUSE_MANAGER_MONEY,       'VP': WAREHOUSE_MANAGER_VP,         'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': WAREHOUSE_MANAGER_COST,            'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+SECRETARY_CARD =                {'ID': SECRETARY_ID,                'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Secretary",                    'Cost': SECRETARY_COST,                 'Money': SECRETARY_MONEY,               'VP': SECRETARY_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': SECRETARY_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CONTROLLER_CARD =               {'ID': CONTROLLER_ID,               'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Controller",                   'Cost': CONTROLLER_COST,                'Money': CONTROLLER_MONEY,              'VP': CONTROLLER_VP,                'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': CONTROLLER_COST,                   'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+JUDGE_CARD =                    {'ID': JUDGE_ID,                    'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Judge",                        'Cost': JUDGE_COST,                     'Money': JUDGE_MONEY,                   'VP': JUDGE_VP,                     'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': JUDGE_COST,                        'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+MISTRESS_OF_CEREMONIES_CARD =   {'ID': MISTRESS_OF_CEREMONIES_ID,   'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Mistress of Ceremonies",       'Cost': MISTRESS_OF_CEREMONIES_COST,    'Money': MISTRESS_OF_CEREMONIES_MONEY,  'VP': MISTRESS_OF_CEREMONIES_VP,    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_UPGRADABLE,      'Upgrade Value': MISTRESS_OF_CEREMONIES_COST,       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CARPENTER_WORKSHOP_CARD =       {'ID': CARPENTER_WORKSHOP_ID,       'Card Type': WORKER_CARD_TYPE,      'Name': "Carpenter Workshop",           'Cost': CARPENTER_WORKSHOP_COST,        'Money': CARPENTER_WORKSHOP_MONEY,      'VP': CARPENTER_WORKSHOP_VP,        'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': CARPENTER_WORKSHOP_COST,           'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': CARPENTER_WORKSHOP_ABILITY,   'Class': CLASS_WOOD}
+GOLD_SMELTER_CARD =             {'ID': GOLD_SMELTER_ID,             'Card Type': WORKER_CARD_TYPE,      'Name': "Gold Smelter",                 'Cost': GOLD_SMELTER_COST,              'Money': GOLD_SMELTER_MONEY,            'VP': GOLD_SMELTER_VP,              'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': GOLD_SMELTER_COST,                 'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_GOLD}
+WEAVING_MILL_CARD =             {'ID': WEAVING_MILL_ID,             'Card Type': WORKER_CARD_TYPE,      'Name': "Weaving Mill",                 'Cost': WEAVING_MILL_COST,              'Money': WEAVING_MILL_MONEY,            'VP': WEAVING_MILL_VP,              'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': WEAVING_MILL_COST,                 'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_WOOL}
+FUR_SHOP_CARD =                 {'ID': FUR_SHOP_ID,                 'Card Type': WORKER_CARD_TYPE,      'Name': "Fur Shop",                     'Cost': FUR_SHOP_COST,                  'Money': FUR_SHOP_MONEY,                'VP': FUR_SHOP_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': FUR_SHOP_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_FUR}
+WHARF_CARD =                    {'ID': WHARF_ID,                    'Card Type': WORKER_CARD_TYPE,      'Name': "Warf",                         'Cost': WHARF_COST,                     'Money': WHARF_MONEY,                   'VP': WHARF_VP,                     'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': WHARF_COST,                        'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_SHIP}
+MARIINSKIJ_THEATER_CARD =       {'ID': MARIINSKIJ_THEATER_ID,       'Card Type': BUILDING_CARD_TYPE,    'Name': "Mariinskij Theater",           'Cost': MARIINSKIJ_THEATER_COST,        'Money': MARIINSKIJ_THEATER_MONEY,      'VP': MARIINSKIJ_THEATER_VP,        'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': MARIINSKIJ_THEATER_COST,           'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': MARIINSKIJ_THEATER_ABILITY,   'Class': CLASS_NONE}
+BANK_CARD =                     {'ID': BANK_ID,                     'Card Type': BUILDING_CARD_TYPE,    'Name': "Bank",                         'Cost': BANK_COST,                      'Money': BANK_MONEY,                    'VP': BANK_VP,                      'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': BANK_COST,                         'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+PETERHOF_CARD =                 {'ID': PETERHOF_ID,                 'Card Type': BUILDING_CARD_TYPE,    'Name': "Peterhof",                     'Cost': PETERHOF_COST,                  'Money': PETERHOF_MONEY,                'VP': PETERHOF_VP,                  'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': PETERHOF_COST,                     'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+ST_ISAAC_CATHEDRAL_CARD =       {'ID': ST_ISAAC_CATHEDRAL_ID,       'Card Type': BUILDING_CARD_TYPE,    'Name': "St. Isaac Cathedral",          'Cost': ST_ISAAC_CATHEDRAL_COST,        'Money': ST_ISAAC_CATHEDRAL_MONEY,      'VP': ST_ISAAC_CATHEDRAL_VP,        'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': ST_ISAAC_CATHEDRAL_COST,           'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CHURCH_OF_JESUS_CHRIST_CARD =   {'ID': CHURCH_OF_JESUS_CHRIST_ID,   'Card Type': BUILDING_CARD_TYPE,    'Name': "Church of Jesus Christ",       'Cost': CHURCH_OF_JESUS_CHRIST_COST,    'Money': CHURCH_OF_JESUS_CHRIST_MONEY,  'VP': CHURCH_OF_JESUS_CHRIST_VP,    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': CHURCH_OF_JESUS_CHRIST_COST,       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+HARBOR_CARD =                   {'ID': HARBOR_ID,                   'Card Type': BUILDING_CARD_TYPE,    'Name': "Harbor",                       'Cost': HARBOR_COST,                    'Money': HARBOR_MONEY,                  'VP': HARBOR_VP,                    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': HARBOR_COST,                       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+SMOLNY_CATHEDRAL_CARD =         {'ID': SMOLNY_CATHEDRAL_ID,         'Card Type': BUILDING_CARD_TYPE,    'Name': "Smolny Cathedral",             'Cost': SMOLNY_CATHEDRAL_COST,          'Money': SMOLNY_CATHEDRAL_MONEY,        'VP': SMOLNY_CATHEDRAL_VP,          'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': SMOLNY_CATHEDRAL_COST,             'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CATHERINE_GREAT_PALACE_CARD =   {'ID': CATHERINE_GREAT_PALACE_ID,   'Card Type': BUILDING_CARD_TYPE,    'Name': "Catherine the Great Palace",   'Cost': CATHERINE_GREAT_PALACE_COST,    'Money': CATHERINE_GREAT_PALACE_MONEY,  'VP': CATHERINE_GREAT_PALACE_VP,    'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': CATHERINE_GREAT_PALACE_COST,       'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+HERMITAGE_CARD =                {'ID': HERMITAGE_ID,                'Card Type': BUILDING_CARD_TYPE,    'Name': "Hermitage",                    'Cost': HERMITAGE_COST,                 'Money': HERMITAGE_MONEY,               'VP': HERMITAGE_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': HERMITAGE_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+WINTER_PALACE_CARD =            {'ID': WINTER_PALACE_ID,            'Card Type': BUILDING_CARD_TYPE,    'Name': "Winter Palace",                'Cost': WINTER_PALACE_COST,             'Money': WINTER_PALACE_MONEY,           'VP': WINTER_PALACE_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': WINTER_PALACE_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+POPE_CARD =                     {'ID': POPE_ID,                     'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Pope",                         'Cost': POPE_COST,                      'Money': POPE_MONEY,                    'VP': POPE_VP,                      'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': POPE_COST,                         'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+WEAPON_MASTER_CARD =            {'ID': WEAPON_MASTER_ID,            'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Weapon Master",                'Cost': WEAPON_MASTER_COST,             'Money': WEAPON_MASTER_MONEY,           'VP': WEAPON_MASTER_VP,             'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': WEAPON_MASTER_COST,                'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+CHAMBER_MAID_CARD =             {'ID': CHAMBER_MAID_ID,             'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Chamber Maid",                 'Cost': CHAMBER_MAID_COST,              'Money': CHAMBER_MAID_MONEY,            'VP': CHAMBER_MAID_VP,              'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': CHAMBER_MAID_COST,                 'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+BUILDER_CARD =                  {'ID': BUILDER_ID,                  'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Builder",                      'Cost': BUILDER_COST,                   'Money': BUILDER_MONEY,                 'VP': BUILDER_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': BUILDER_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+SENATOR_CARD =                  {'ID': SENATOR_ID,                  'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Senator",                      'Cost': SENATOR_COST,                   'Money': SENATOR_MONEY,                 'VP': SENATOR_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': SENATOR_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+PATRIARCH_CARD =                {'ID': PATRIARCH_ID,                'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Patriarch",                    'Cost': PATRIARCH_COST,                 'Money': PATRIARCH_MONEY,               'VP': PATRIARCH_VP,                 'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': PATRIARCH_COST,                    'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+TAX_MAN_CARD =                  {'ID': TAX_MAN_ID,                  'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Tax Man",                      'Cost': TAX_MAN_COST,                   'Money': TAX_MAN_MONEY,                 'VP': TAX_MAN_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': TAX_MAN_COST,                      'IsSpecialCard': IS_SPECIAL,        'SpecialAbility': TAX_MAN_ABILITY,              'Class': CLASS_NONE}
+ADMIRAL_CARD =                  {'ID': ADMIRAL_ID,                  'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Admiral",                      'Cost': ADMIRAL_COST,                   'Money': ADMIRAL_MONEY,                 'VP': ADMIRAL_VP,                   'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': ADMIRAL_COST,                      'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
+MINISTER_OF_FA_CARD =           {'ID': MINISTER_OF_FA_ID,           'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Minister of Foreign Affairs",  'Cost': MINISTER_OF_FA_COST,            'Money': MINISTER_OF_FA_MONEY,          'VP': MINISTER_OF_FA_VP,            'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': MINISTER_OF_FA_COST,               'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE} 
+CZAR_CARD =                     {'ID': CZAR_ID,                     'Card Type': ARISTOCRAT_CARD_TYPE,  'Name': "Czar",                         'Cost': CZAR_COST,                      'Money': CZAR_MONEY,                    'VP': CZAR_VP,                      'Status': PLAYER_ACTIVE_CARD,   'IsUpgradable': IS_NOT_UPGRADABLE,  'Upgrade Value': CZAR_COST,                         'IsSpecialCard': IS_NOT_SPECIAL,    'SpecialAbility': NO_SPECIAL_ABILITY,           'Class': CLASS_NONE}
 
 
 
@@ -260,6 +389,32 @@ ARISTOCRAT_CARDS = [[AUTHOR_CARD, 6],
                [CONTROLLER_CARD, 3],
                [JUDGE_CARD, 2],
                [MISTRESS_OF_CEREMONIES_CARD, 2]]
+
+TRADING_CARDS = [[CARPENTER_WORKSHOP_CARD, 1], 
+                 [GOLD_SMELTER_CARD, 1],
+                 [WEAVING_MILL_CARD, 1],
+                 [FUR_SHOP_CARD, 1],  
+                 [WHARF_CARD, 1],     
+                 [MARIINSKIJ_THEATER_CARD, 1],
+                 [BANK_CARD, 1],      
+                 [PETERHOF_CARD, 1],  
+                 [ST_ISAAC_CATHEDRAL_CARD, 1],
+                 [CHURCH_OF_JESUS_CHRIST_CARD, 1],
+                 [HARBOR_CARD, 1],    
+                 [SMOLNY_CATHEDRAL_CARD, 1],
+                 [CATHERINE_GREAT_PALACE_CARD, 1],
+                 [HERMITAGE_CARD, 1],             
+                 [WINTER_PALACE_CARD, 1],         
+                 [POPE_CARD, 1],                  
+                 [WEAPON_MASTER_CARD, 1],         
+                 [CHAMBER_MAID_CARD, 1],          
+                 [BUILDER_CARD, 1],               
+                 [SENATOR_CARD, 1],               
+                 [PATRIARCH_CARD, 1],             
+                 [TAX_MAN_CARD, 1],               
+                 [ADMIRAL_CARD, 1],               
+                 [MINISTER_OF_FA_CARD, 1],         
+                 [CZAR_CARD, 1]]
 
 
 #--------------------------------------------------------------------------
@@ -311,3 +466,4 @@ PLAYERS = [[PLAYER_1, "Player 1"], [PLAYER_2, "Player 2"], [PLAYER_3, "Player 3"
 PLAYER_COLORS = [[PLAYER_GREEN, "Green"], [PLAYER_BLUE, "Blue"], [PLAYER_YELLOW, "Yellow"], [PLAYER_RED, "Red"]]
 PHASES = [[PHASE_WORKER, "Worker Phase"], [PHASE_BUILDING, "Building Phase"], [PHASE_ARISTOCRAT, "Aristocrat Phase"], [PHASE_TRADING, "Trading Card Phase"]]
 ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"]]
+MARKERS = [[PLAYER_MARKER_WORKER, "Worker Token"], [PLAYER_MARKER_BUIDLING, "Building Token"], [PLAYER_MARKER_ARISTOCRAT, "Aristocrat Token"], [PLAYER_MARKER_TRADING, "Trading Card Token"]]
