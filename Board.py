@@ -16,6 +16,7 @@ from Game import Game
 from Contents import *
 from PyQt5.Qt import QListWidgetItem, QPixmap
 from MainWindow import Ui_MainWindow
+from time import sleep
 
 
 class Board(Ui_MainWindow):
@@ -56,12 +57,12 @@ class Board(Ui_MainWindow):
         self.New_Game = Game (1)
         self.listStatus.addItem(QListWidgetItem("Setting Up Game"))
         self.New_Game.GameSetup()
-        self.listStatus.addItem(QListWidgetItem("Game Setup Complete"))
         self.AddDeckstoGameBoard()
         self.RefreshPlayerIDs()
         self.RefreshPlayerColors()
         self.RefreshMoney()
         self.RefreshVictoryPoints()
+        self.listStatus.addItem(QListWidgetItem("Game Setup Complete"))
         self.RunGame()
         
     def ClearBoard (self):
@@ -97,25 +98,38 @@ class Board(Ui_MainWindow):
         self.listStatus.addItem(QListWidgetItem("Adding Trading Deck to Board"))
         for x in self.New_Game.TradingDeck.Cards :
             self.listDeck_Trading.addItem(QListWidgetItem(x.CardName))
+    
     def RefreshPlayerHands(self):
         
         #Clear the Player List Widgets before adding the cards again
         for x in range(len(self.PlayerCardLists)) :
             self.PlayerCardLists[x].clear()
         
-        for p in self.New_Game.Players :
-            if p.ID == PLAYER_1 :
-                for x in p.Hand :
-                    self.listCards_Player1.addItem(QListWidgetItem(x.CardName))
-            if p.ID == PLAYER_2 :
-                for x in p.Hand :
-                    self.listCards_Player2.addItem(QListWidgetItem(x.CardName))
-            if p.ID == PLAYER_3 :
-                for x in p.Hand :
-                    self.listCards_Player3.addItem(QListWidgetItem(x.CardName))
-            if p.ID == PLAYER_4 :
-                for x in p.Hand :
-                    self.listCards_Player4.addItem(QListWidgetItem(x.CardName))             
+        for Player in self.New_Game.Players :
+            if Player.ID == PLAYER_1 :
+                for Card in Player.Hand :
+                    if Card.CardStatus == PLAYER_ACTIVE_CARD :
+                        self.listCards_Player1.addItem(QListWidgetItem(Card.CardName))
+                    else:
+                        self.listCards_Player1.addItem(QListWidgetItem(Card.CardName + " - Held"))
+            if Player.ID == PLAYER_2 :
+                for Card in Player.Hand :
+                    if Card.CardStatus == PLAYER_ACTIVE_CARD :
+                        self.listCards_Player2.addItem(QListWidgetItem(Card.CardName))
+                    else:
+                        self.listCards_Player2.addItem(QListWidgetItem(Card.CardName + " - Held"))
+            if Player.ID == PLAYER_3 :
+                for Card in Player.Hand :
+                    if Card.CardStatus == PLAYER_ACTIVE_CARD :
+                        self.listCards_Player3.addItem(QListWidgetItem(Card.CardName))
+                    else:
+                        self.listCards_Player3.addItem(QListWidgetItem(Card.CardName + " - Held"))
+            if Player.ID == PLAYER_4 :
+                for Card in Player.Hand :
+                    if Card.CardStatus == PLAYER_ACTIVE_CARD :
+                        self.listCards_Player4.addItem(QListWidgetItem(Card.CardName))
+                    else:
+                        self.listCards_Player4.addItem(QListWidgetItem(Card.CardName + " - Held"))             
 
     def RefreshPlayerColors (self):
         self.lblColor_Player1.setText("Color: " + PLAYER_COLORS [self.New_Game.Players[0].Color][1])
@@ -181,6 +195,28 @@ class Board(Ui_MainWindow):
                 self.lblVP_Player3.setText("Victory Points: " + str(Player.Score))
             if Player.ID == PLAYER_4 :
                 self.lblVP_Player4.setText("Victory Points: " + str(Player.Score))
+                
+    def RefreshHeldCards (self):
+        for Player in self.New_Game.Players :
+            if Player.ID == PLAYER_1 :
+                self.lblHeldCards_Player1.setText("Held Cards: " + str(Player.HeldCards))
+            if Player.ID == PLAYER_2 :
+                self.lblHeldCards_Player2.setText("Held Cards: " + str(Player.HeldCards))
+            if Player.ID == PLAYER_3 :
+                self.lblHeldCards_Player3.setText("Held Cards: " + str(Player.HeldCards))
+            if Player.ID == PLAYER_4 :
+                self.lblHeldCards_Player4.setText("Held Cards: " + str(Player.HeldCards))
+    
+    def RefreshUniqueAristocrate (self):
+        for Player in self.New_Game.Players :
+            if Player.ID == PLAYER_1 :
+                self.lblAristocrats_Player1.setText("Unique Aristocrats: " + str(Player.UniqueAristrocrats))
+            if Player.ID == PLAYER_2 :
+                self.lblAristocrats_Player2.setText("Unique Aristocrats: " + str(Player.UniqueAristrocrats))
+            if Player.ID == PLAYER_3 :
+                self.lblAristocrats_Player3.setText("Unique Aristocrats: " + str(Player.UniqueAristrocrats))
+            if Player.ID == PLAYER_4 :
+                self.lblAristocrats_Player4.setText("Unique Aristocrats: " + str(Player.UniqueAristrocrats))        
     
     def RefreshBoard (self):
         self.RefreshCardsInPlay()
@@ -188,41 +224,55 @@ class Board(Ui_MainWindow):
         self.RefreshPlayerPhases()
         self.RefreshMoney()
         self.RefreshVictoryPoints()
+        self.RefreshHeldCards()
+        self.RefreshUniqueAristocrate()
     
     def RunGame (self):
-        Phase_Count = 0
+        Round_Count = 1
         Max_Phase = 5
         while not self.New_Game.EndOfGame :
-  
-            print("Starting Worker Phase")
-            self.New_Game.DealCards(WORKER_CARD_TYPE)
-            self.New_Game.ProcessPhaseActions(PHASE_WORKER)
-            self.New_Game.ProcessPhaseScoring(PHASE_WORKER)
+            try :
+                print("----------------------------------------------- Starting Round "+ str(Round_Count) + "  -----------------------------------------------")
+                print("----------------------- Starting Worker Phase -----------------------")
+                self.New_Game.DealCards(WORKER_CARD_TYPE)
+                self.New_Game.ProcessPhaseActions(PHASE_WORKER)
+                self.New_Game.ProcessPhaseScoring(PHASE_WORKER)
     
-            print("Starting Building Phase")
-            self.New_Game.DealCards (BUILDING_CARD_TYPE)
-            self.New_Game.ProcessPhaseActions(PHASE_BUILDING)
-            self.New_Game.ProcessPhaseScoring(PHASE_BUILDING)
-    
-            print("Starting Aristocrat Phase")
-            self.New_Game.DealCards (ARISTOCRAT_CARD_TYPE)
-            self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT)
-            self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
-    
-            print("Starting Trading Phase")
-            self.New_Game.DealCards (TRADING_CARD_TYPE)
-            self.New_Game.ProcessPhaseActions(PHASE_TRADING)
-    
-            self.New_Game.RotateCards ()
-            self.New_Game.RotateMarkers ()
-            self.RefreshBoard()
-            #self.New_Game.RotatePlayers ()
+                print("----------------------- Starting Building Phase -----------------------")
+                self.New_Game.DealCards (BUILDING_CARD_TYPE)
+                self.New_Game.ProcessPhaseActions(PHASE_BUILDING)
+                self.New_Game.ProcessPhaseScoring(PHASE_BUILDING)
+        
+                print("----------------------- Starting Aristocrat Phase -----------------------")
+                self.New_Game.DealCards (ARISTOCRAT_CARD_TYPE)
+                self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT)
+                self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
+        
+                print("----------------------- Starting Trading Phase -----------------------")
+                self.New_Game.DealCards (TRADING_CARD_TYPE)
+                self.New_Game.ProcessPhaseActions(PHASE_TRADING)
+                
+                print("----------------------- Round Cleanup -----------------------")
+                self.New_Game.RotateCards ()
+                self.New_Game.RotateMarkers ()
+                self.RefreshBoard()
+                sleep(1)
+                #self.New_Game.RotatePlayers ()
+                print("----------------------------------------------- Completed Round "+ str(Round_Count) + " -----------------------------------------------")
+                self.listStatus.addItem(QListWidgetItem("Completed Round "+ str(Round_Count)))
+                
+                Round_Count += 1
             
-            Phase_Count += 1
-            print("Completed Phase "+ str(Phase_Count))
-            self.listStatus.addItem(QListWidgetItem("Completed Phase "+ str(Phase_Count)))
+            except :
+                print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
             #if Phase_Count == Max_Phase :
             #    self.New_Game.EndOfGame = True    
+        
+        print ("----------------------- Processing final point adjustments -----------------------")
+        
+        self.New_Game.ProcessEndofGameActions()
+        self.RefreshBoard()
+        
         print("------------------------------------------------------------- Game Completed -------------------------------------------------------------")
                   
 if __name__ == "__main__":
@@ -230,9 +280,11 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
 
+    
     GameBoard = Board()
     GameBoard.setupUi(MainWindow)
     GameBoard.SetupBoard()
     GameBoard.btnStart.clicked.connect(GameBoard.StartButtonClick)  
     MainWindow.show()
     app.exec()
+   
