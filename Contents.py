@@ -11,6 +11,14 @@ ARISTOCRAT_CARD_TYPE = 2
 TRADING_CARD_TYPE = 3
 
 #--------------------------------------------------------------------------
+# Deck Sizes
+#--------------------------------------------------------------------------
+NUM_CARDS_WORKER_DECK = 31
+NUM_CARDS_BUILDING_DECK = 28
+NUM_CARDS_ARISTOCRAT_DECK = 27
+NUM_CARDS_TRADING_DECK = 30
+
+#--------------------------------------------------------------------------
 # Card IDs
 #--------------------------------------------------------------------------
 
@@ -270,6 +278,7 @@ CZAR_VP = 6
 #--------------------------------------------------------------------------
 PLAYER_ACTIVE_CARD = 0
 PLAYER_HELD_CARD = 1
+PLAYER_DRAW_CARD = 2
 
 #--------------------------------------------------------------------------
 # Row Position
@@ -477,5 +486,5 @@ MAX_CARDS_TO_HOLD = 3
 PLAYERS = [[PLAYER_1, "Player 1"], [PLAYER_2, "Player 2"], [PLAYER_3, "Player 3"], [PLAYER_4, "Player 4"]]
 PLAYER_COLORS = [[PLAYER_GREEN, "Green"], [PLAYER_BLUE, "Blue"], [PLAYER_YELLOW, "Yellow"], [PLAYER_RED, "Red"]]
 PHASES = [[PHASE_WORKER, "Worker Phase"], [PHASE_BUILDING, "Building Phase"], [PHASE_ARISTOCRAT, "Aristocrat Phase"], [PHASE_TRADING, "Trading Card Phase"]]
-ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"],[ACTION_UPGRADE, "Upgrade"]]
+ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"],[ACTION_UPGRADE, "Upgrade"],[ACTION_PUB, "Use the Pub"]]
 MARKERS = [[PLAYER_MARKER_WORKER, "Worker Token"], [PLAYER_MARKER_BUIDLING, "Building Token"], [PLAYER_MARKER_ARISTOCRAT, "Aristocrat Token"], [PLAYER_MARKER_TRADING, "Trading Card Token"]]

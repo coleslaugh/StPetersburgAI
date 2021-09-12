@@ -255,8 +255,7 @@ class Board(Ui_MainWindow):
                 print("----------------------- Round Cleanup -----------------------")
                 self.New_Game.RotateCards ()
                 self.New_Game.RotateMarkers ()
-                self.RefreshBoard()
-                sleep(1)
+
                 #self.New_Game.RotatePlayers ()
                 print("----------------------------------------------- Completed Round "+ str(Round_Count) + " -----------------------------------------------")
                 self.listStatus.addItem(QListWidgetItem("Completed Round "+ str(Round_Count)))

@@ -21,12 +21,9 @@ from Contents import (  PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4,
                         BOARD_UPPER_ROW, BOARD_LOWER_ROW, PLAYER_ACTIVE_CARD, PLAYERS, PHASES, MARKERS,
                         TRADING_CARDS, TRADING_CARD_TYPE, TAX_MAN_ID, MARIINSKIJ_THEATER_ID, MAX_CARDS_TO_HOLD, ACTIONS,
     PHASE_WORKER, ACTION_UPGRADE, MONEY_PER_VP, ARISTOCRAT_SCORING,
-    PENALTY_HELD_CARD)
+    PENALTY_HELD_CARD, PHASE_BUILDING, PUB_ABILITY, ACTION_OBSERVATORY,
+    ACTION_PUB, OBSERVATORY_ABILITY, IS_UPGRADABLE, CLASS_ALL, PLAYER_DRAW_CARD)
 from Player import Player
-
-
-
-
 
 
 class Game(object):
@@ -59,6 +56,8 @@ class Game(object):
         self.BuildingDeck = Deck (BUILDING_CARDS, BUILDING_CARD_TYPE)
         self.AristocratDeck = Deck (ARISTOCRAT_CARDS, ARISTOCRAT_CARD_TYPE)
         self.TradingDeck = Deck (TRADING_CARDS, TRADING_CARD_TYPE)
+        
+        #self.Decks = [[WORKER_CARD_TYPE, self.WorkerDeck][BUILDING_CARD_TYPE, self.BuildingDeck][ARISTOCRAT_CARD_TYPE, self.AristocratDeck][TRADING_CARD_TYPE, self.TradingDeck]]
         
         self.BuildingDeck.Shuffle()
         self.WorkerDeck.Shuffle()
@@ -170,8 +169,11 @@ class Game(object):
                     UpgradableCards = Player.DetermineUpgradeableCardPairs (self.CardsInPlay)
                     
                     # Determine if the current player has the Observatory and which decks can be drawn from. Must check if it's been used this round
-                    
-                    # Create a multi dimensional list of actions and Objects [[ACTION_BUY][Card],[ACTION_BUY][Card], [ACTION_UPGRADE][Upgrade Card][Replaced Card],[ACTION_HOLD][Card],[ACTION_OBSERVATORY][WORKER_DECK]]
+                    if Phase == PHASE_BUILDING and Player.ObservatoryBonus == OBSERVATORY_ABILITY and Player.UsedObservatory == False :
+                        DrawDecks = []
+                        DrawDecks = Player.DetermineObservatoryAction(self.WorkerDeck.TopCard, self.BuildingDeck.TopCard, self.AristocratDeck.TopCard, self.TradingDeck.TopCard)
+                        
+                    # Create a list of actions and Objects [[ACTION_BUY][Card],[ACTION_BUY][Card], [ACTION_UPGRADE][Upgrade Card][Replaced Card],[ACTION_HOLD][Card],[ACTION_OBSERVATORY][WORKER_DECK]]
                     Actions = [] 
                     
                     # Build a list of allowed actions BUY, HOLD, PASS, OBVS, UPGRADE to send to the DetermineAction Function              
@@ -179,14 +181,20 @@ class Game(object):
                     for Card in BuyableCards :
                         Actions.append([ACTION_BUY, Card])
                     
-                    # Determine if the Player can hold more cards and determine which one.
+                    # Add Holdable cards to Actions list considering if the player has the warehouse
                     if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
                         for Card in HoldableCards :
                             Actions.append ([ACTION_HOLD, Card])
                             
+                    # Add Upgradable Card Pairs to the Actions List
                     for CardPair in UpgradableCards :
                         Actions.append([ACTION_UPGRADE, CardPair])   
                        
+                    # Add which decks the Observatory can be use to draw from to the Actions List
+                    if Phase == PHASE_BUILDING and Player.ObservatoryBonus == OBSERVATORY_ABILITY and Player.UsedObservatory == False :
+                        for DrawDeck in DrawDecks :
+                            Actions.append([ACTION_OBSERVATORY, DrawDeck])
+                    
                     # Add the Pass Action to the Actions List
                     Actions.append ([ACTION_PASS])
                     
@@ -205,7 +213,11 @@ class Game(object):
                     if PlayerAction == ACTION_UPGRADE :
                         #print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard[1].CardName + " with a " + SelectedCard[0].CardName)
                         self.ProcessUpgradeAction(Player, SelectedCard)
-                    
+                        
+                    if PlayerAction == ACTION_OBSERVATORY :
+                        #print  (PLAYERS[Player.ID][1] + "  has chosen to use the observatory and draw from the " + ACTIONS[PlayerAction][1] + " a " + SelectedCard[1].CardName + " with a " + SelectedCard[0].CardName)
+                        self.ProcessObservatoryAction(Player, SelectedCard)
+                        
                     if PlayerAction == ACTION_PASS :
                         #print (PLAYERS[Player.ID][1] + " has chosen to Pass")
                         self.ProcessPassAction(Player)
@@ -219,6 +231,7 @@ class Game(object):
 
     def ProcessUpgradeAction (self, Player, SelectedCardPair):
         Upgrade_Held_Card = False
+        Remove_Card = True
         TradingCard = SelectedCardPair[0]
         TargetCard = SelectedCardPair[1]
         
@@ -229,11 +242,14 @@ class Game(object):
         
         if Player.Money >= TradingCardCost :
             if TradingCard.CardStatus == PLAYER_HELD_CARD :
-                Upgrade_Held_Card = True
+                Remove_Card = False
+                
+            if TradingCard.CardStatus == PLAYER_DRAW_CARD :
+                Remove_Card = False
             
             Player.UpgradeCard(TradingCard, TargetCard)
             
-            if Upgrade_Held_Card == False :
+            if Remove_Card == True :
                 self.CardsInPlay.remove(TradingCard)
 
             Player.Money -= TradingCardCost
@@ -242,24 +258,108 @@ class Game(object):
         else :
             print  (PLAYERS[Player.ID][1] + " could not afford to upgrade a " + TargetCard.CardName + " with a " + TradingCard.CardName + ". Player Money: " + str(Player.Money) + " Upgrade Cost: " + str(TradingCardCost))
     
-    def ProcessObservatoryAction (self, Player, SelectedCard):  
+    def ProcessObservatoryAction (self, Player, SelectedCardType):  
         
-        
-        return
+        try : 
+            # Get Card from Selected Deck and advance the top card
+            if SelectedCardType == WORKER_CARD_TYPE :
+                SelectedCard = self.WorkerDeck.Cards[self.WorkerDeck.TopCard]
+                self.WorkerDeck.TopCard += 1
+            if SelectedCardType == BUILDING_CARD_TYPE :
+                SelectedCard = self.BuildingDeck.Cards[self.BuildingDeck.TopCard]
+                self.BuildingDeck.TopCard += 1
+            if SelectedCardType == ARISTOCRAT_CARD_TYPE :
+                SelectedCard = self.AristocratDeck.Cards[self.AristocratDeck.TopCard]
+                self.AristocratDeck.TopCard += 1
+            if SelectedCardType == TRADING_CARD_TYPE :
+                SelectedCard = self.TradingDeck.Cards[self.TradingDeck.TopCard]
+                self.TradingDeck.TopCard += 1    
+            
+            print  (PLAYERS[Player.ID][1] + " used the Observatory to draw from a deck : Card Selected -  " + SelectedCard.CardName) 
+                
+            Actions = []   
+    
+            # Find the discounted cost of the card
+            Player.DetermineCardCosts (list([SelectedCard]))
+            
+            # if the player has the money to buy the card add a Buy Action to the actions list
+            if Player.Money >= SelectedCard.DiscountedCost and SelectedCard.CardType == IS_UPGRADABLE :
+                print  (PLAYERS[Player.ID][1] + " has the option to buy the card : Card Selected -  " + SelectedCard.CardName)
+                Actions.append([ACTION_BUY, SelectedCard])
+                
+            # If the player do not have the money to buy the card add a Hold Action to the actions list
+            if Player.Money < SelectedCard.DiscountedCost and SelectedCard.CardType == IS_UPGRADABLE :
+                print  (PLAYERS[Player.ID][1] + " has the option to hold the card : Card Selected -  " + SelectedCard.CardName)
+                Actions.append([ACTION_HOLD, SelectedCard])
+            
+            # Add Actions if the card was a Trading Card
+            
+            if SelectedCardType == TRADING_CARD_TYPE :
+                for TargetCard in Player.Hand :
+                    if (TargetCard.CardClass == SelectedCard.CardClass and TargetCard.isUpgradable == True) or (SelectedCard.CardType == WORKER_CARD_TYPE and TargetCard.CardClass == CLASS_ALL and TargetCard.isUpgradable == True) :
+                        # Determine the Upgrade cost and check if the player can afford it
+                        TradingCardCost = SelectedCard.DiscountedCost - TargetCard.UpgradeValue
+                        if TradingCardCost < 1 :
+                            TradingCardCost = 1
+                            
+                        if TradingCardCost <= Player.Money :
+                            print  (PLAYERS[Player.ID][1] + " has the option to upgrade the card : Card Selected -  " + SelectedCard.CardName + " : Target Card - " + TargetCard.CardName)
+                            Actions.append([ACTION_UPGRADE,list([SelectedCard, TargetCard])])
+    
+            print  (PLAYERS[Player.ID][1] + " has the option to discard (Pass) the card : Card Selected -  " + SelectedCard.CardName)
+            Actions.append([ACTION_PASS])
+            
+    
+            PlayerAction, SelectedCard = Player.DetermineAction(Actions)   
+                        
+            
+            if PlayerAction == ACTION_BUY :
+                print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard.CardName)
+                SelectedCard.CardStatus = PLAYER_DRAW_CARD
+                self.ProcessBuyAction(Player, SelectedCard)
+                 
+            if PlayerAction == ACTION_HOLD :
+                print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard.CardName)
+                SelectedCard.CardStatus = PLAYER_DRAW_CARD
+                self.ProcessHoldAction(Player, SelectedCard)
+                 
+            if PlayerAction == ACTION_UPGRADE :
+                print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard[1].CardName + " with a " + SelectedCard[0].CardName)
+                SelectedCard[0].CardStatus = PLAYER_DRAW_CARD
+                self.ProcessUpgradeAction(Player, SelectedCard)
+                 
+            if PlayerAction == ACTION_PASS :
+                print (PLAYERS[Player.ID][1] + " has chosen to Pass")
+                self.ProcessPassAction(Player)
+                
+            Player.Score -= 1
+            Player.UsedObservatory = True
+
+            return
+        except :
+            print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
     
     def ProcessBuyAction (self, Player, SelectedCard):
-        Buy_Held_Card = False
+        Remove_Card = True
+        
         if Player.Money >= SelectedCard.DiscountedCost :
             if SelectedCard.CardStatus == PLAYER_HELD_CARD :
-                print (PLAYERS[Player.ID][1] + " getting ready to buy a held card: " + SelectedCard.CardName)
-                Buy_Held_Card = True
+                print (PLAYERS[Player.ID][1] + " is buying a held card: " + SelectedCard.CardName)
+                Remove_Card = False
+            
+            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
+                print (PLAYERS[Player.ID][1] + " is buying a card drawn from the observatory: " + SelectedCard.CardName)
+                Remove_Card = False
+            
             
             Player.BuyCard(SelectedCard)
             
-            if Buy_Held_Card == False :
+            # Remove Card from Cards In Play if the Card was not Held or Drawn
+            if Remove_Card == True :
                 self.CardsInPlay.remove(SelectedCard)
 
             Player.Money -= SelectedCard.DiscountedCost
+            
             print  (PLAYERS[Player.ID][1] + " bought a " + SelectedCard.CardName + " for " + str(SelectedCard.DiscountedCost) + " money. Player Remaining Money: " + str(Player.Money))
         else :
             print  (PLAYERS[Player.ID][1] + " could not afford to buy a " + SelectedCard.CardName + ". Player Money: " + str(Player.Money) + " Card Cost: " + str(SelectedCard.DiscountedCost))
@@ -267,9 +367,17 @@ class Game(object):
     def ProcessHoldAction (self, Player, SelectedCard):
         
         # !!! Must add Warehouse here !!!
+        Remove_Card_From_Board = True
+        
         if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
+            
+            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
+                Remove_Card_From_Board = False
+            
             Player.HoldCard(SelectedCard)
-            self.CardsInPlay.remove(SelectedCard)
+            
+            if Remove_Card_From_Board == True :
+                self.CardsInPlay.remove(SelectedCard)
 
             print  (PLAYERS[Player.ID][1] + " held a " + SelectedCard.CardName + " : Total held cards - " + str(Player.HeldCards))
         else :
@@ -302,7 +410,40 @@ class Game(object):
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD and Card.CardID == MARIINSKIJ_THEATER_ID):
                     Player.Money += Aristocrats       
                     #print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+        
+        # Process Pub point Buying and reset the Used Observatory attribute
+        if Phase == PHASE_BUILDING :
+            self.ProcessPubScoring()
             
+            for Player in self.Players :
+                Player.UsedObservatory = False
+            
+            
+    def ProcessPubScoring (self):
+        
+        #Check to see if anyone has the Pub
+        for Player in self.Players :
+            OldScore = 0
+            OldMoney = 0
+            
+            if Player.PubBonus == PUB_ABILITY :
+                Actions = []
+                OldScore = Player.Score
+                OldMoney = Player.Money
+                for x in range (0, 5) :
+                    if Player.Money >= x * 2 :
+                        Actions.append ([ACTION_PUB, x])
+                    
+                # Give the Actions list to the player and get a decision back
+                PlayerAction, Points = Player.DetermineAction(Actions)
+                
+                if PlayerAction == ACTION_PUB :
+                    Player.Money -= (Points * 2)
+                    Player.Score += Points 
+                    print (PLAYERS[Player.ID][1] + " used the Pub and bought " + str(Points) + " points : Old Score - " + str(OldScore) + " New Score - " + str(Player.Score) + " : Old Money - " + str(OldMoney) + " : New Money - " + str(Player.Money))
+        return
+    
+    
     
     def ProcessAristocratScoring (self):
         
