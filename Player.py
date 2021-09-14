@@ -12,15 +12,11 @@ from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PA
     CLASS_ALL, TRADING_CARD_TYPE, ACTION_UPGRADE, OBSERVATORY_ID, PUB_ID,\
     PUB_ABILITY, ACTION_OBSERVATORY, ACTION_PUB, OBSERVATORY_ABILITY,\
     NUM_CARDS_WORKER_DECK, NUM_CARDS_BUILDING_DECK, NUM_CARDS_ARISTOCRAT_DECK,\
-    NUM_CARDS_TRADING_DECK
+    NUM_CARDS_TRADING_DECK, PLAYER_DELT_CARD, PLAYER_DRAW_CARD
 from random import randint
-from select import select
-
-
 
 class Player(object):
-   
-    
+      
     def __init__(self, ID, Name ,Color, Money, Score, Marker):
         self.ID = ID
         self.Name = Name
@@ -37,15 +33,15 @@ class Player(object):
         self.PubBonus = 0
         self.UniqueAristrocrats = 0
         
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Functions to Buy, Hold, Upgrade and Pass Cards
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def BuyCard(self, card_to_buy):
-        
-        if card_to_buy.CardStatus == PLAYER_HELD_CARD :
-            self.HeldCards -= 1
         
         # Check to see if the Card was a unique aristocrat. Must be done before card is added to the Hand
         UniqueAristrocrat = True
         if card_to_buy.CardType == ARISTOCRAT_CARD_TYPE :
-            print (PLAYERS[self.ID][1] + " is buying Aristocrat Card Checking for Uniqueness")
+            print (PLAYERS[self.ID][1] + " is buying Aristocrat Card Checking for Uniqueness : Current unique aristocrats - "  + str(self.UniqueAristrocrats))
             for Card in self.Hand :
                 if Card.CardID == card_to_buy.CardID and Card.CardStatus == PLAYER_ACTIVE_CARD :
                     UniqueAristrocrat = False
@@ -55,8 +51,13 @@ class Player(object):
                 print (PLAYERS[self.ID][1] + " : Aristocrat was unique adding to total. New Total: " + str(self.UniqueAristrocrats))
         
         # Add the Card to the hand
-        card_to_buy.CardStatus = PLAYER_ACTIVE_CARD
-        self.Hand.append(card_to_buy)
+        if card_to_buy.CardStatus == PLAYER_HELD_CARD :
+            self.HeldCards -= 1
+            card_to_buy.CardStatus = PLAYER_ACTIVE_CARD
+        
+        if card_to_buy.CardStatus == PLAYER_DELT_CARD or card_to_buy.CardStatus == PLAYER_DRAW_CARD :
+            card_to_buy.CardStatus = PLAYER_ACTIVE_CARD
+            self.Hand.append(card_to_buy)
                 
         # Activate Bonus for Special Card
         if card_to_buy.CardID == WAREHOUSE_ID :
@@ -68,7 +69,7 @@ class Player(object):
         if card_to_buy.CardID == PUB_ID :
             self.PubBonus = PUB_ABILITY
         
-        Player.hasPassed = False
+        self.hasPassed = False
         #print(PLAYERS[self.ID][1] + " bought a " + card_to_buy.CardName)
     
     def UpgradeCard (self, TradingCard, TargetCard):
@@ -88,9 +89,14 @@ class Player(object):
                 self.UniqueAristrocrats += 1
                 print (PLAYERS[self.ID][1] + " : Aristocrat was unique adding to total. New Total: " + str(self.UniqueAristrocrats))  
         
-        TradingCard.CardStatus = PLAYER_ACTIVE_CARD
-        self.Hand.append(TradingCard)
-        self.Hand.remove(TargetCard)
+        if TradingCard.CardStatus == PLAYER_HELD_CARD :
+            TradingCard.CardStatus = PLAYER_ACTIVE_CARD
+            self.Hand.remove(TargetCard)          
+        
+        if TradingCard.CardStatus == PLAYER_DELT_CARD or TradingCard.CardStatus == PLAYER_DRAW_CARD :
+            TradingCard.CardStatus = PLAYER_ACTIVE_CARD
+            self.Hand.append(TradingCard)
+            self.Hand.remove(TargetCard)
               
         if TargetCard.CardID == WAREHOUSE_ID :
             self.WarehouseBonus = 0
@@ -101,18 +107,21 @@ class Player(object):
         if TargetCard.CardID == PUB_ID :
             self.PubBonus = 0
         
-        Player.hasPassed = False       
+        self.hasPassed = False       
     
     def HoldCard(self, card_to_hold):
         card_to_hold.CardStatus = PLAYER_HELD_CARD
         self.Hand.append(card_to_hold)
         self.HeldCards += 1
-        Player.hasPassed = False
+        self.hasPassed = False
     
     def Pass (self):
         self.hasPassed = True
         return 
      
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Functions to Determine what actions are possible
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def DetermineCardCosts (self, CardsInPlay):
         
         GoldSmelterAdjustment = 0
@@ -244,6 +253,9 @@ class Player(object):
            
         return observatory_actions
     
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Function to determine what action the player takes
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def DetermineAction(self, Actions):
     
         # The AI Brain will need to be called here instead of the random call

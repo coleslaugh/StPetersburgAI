@@ -5,24 +5,22 @@ Created on Aug 25, 2021
 '''
 from random import random
 import sys
-import copy
-
-from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Deck import Deck
-from Contents import (  PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, 
+from Contents import (  PLAYERS, PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, 
                         PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED, 
-                        PLAYERS_PER_GAME, WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, 
-                        WORKER_CARD_TYPE, BUILDING_CARD_TYPE, ARISTOCRAT_CARD_TYPE, 
-                        PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, PLAYER_MARKER_ARISTOCRAT, 
-                        PLAYER_MARKER_TRADING, PLAYER_MARKER_BUIDLING, 
-                        PLAYER_MARKER_WORKER, MAX_CARDS_ON_BOARD,
-                        ACTION_BUY, ACTION_HOLD, ACTION_PASS, PLAYER_HELD_CARD,
-                        BOARD_UPPER_ROW, BOARD_LOWER_ROW, PLAYER_ACTIVE_CARD, PLAYERS, PHASES, MARKERS,
-                        TRADING_CARDS, TRADING_CARD_TYPE, TAX_MAN_ID, MARIINSKIJ_THEATER_ID, MAX_CARDS_TO_HOLD, ACTIONS,
-    PHASE_WORKER, ACTION_UPGRADE, MONEY_PER_VP, ARISTOCRAT_SCORING,
-    PENALTY_HELD_CARD, PHASE_BUILDING, PUB_ABILITY, ACTION_OBSERVATORY,
-    ACTION_PUB, OBSERVATORY_ABILITY, IS_UPGRADABLE, CLASS_ALL, PLAYER_DRAW_CARD)
+                        PLAYERS_PER_GAME, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 
+                        WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, TRADING_CARDS,
+                        WORKER_CARD_TYPE, BUILDING_CARD_TYPE, ARISTOCRAT_CARD_TYPE, TRADING_CARD_TYPE,
+                        PHASES, PHASE_BUILDING,
+                        MARKERS,PLAYER_MARKER_WORKER, PLAYER_MARKER_BUIDLING, PLAYER_MARKER_ARISTOCRAT, PLAYER_MARKER_TRADING,
+                        ACTIONS, ACTION_BUY, ACTION_HOLD, ACTION_PASS, ACTION_UPGRADE, ACTION_OBSERVATORY, ACTION_PUB,
+                        BOARD_UPPER_ROW, BOARD_LOWER_ROW, 
+                        PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, PENALTY_HELD_CARD, 
+                        TAX_MAN_ID, MARIINSKIJ_THEATER_ID, MAX_CARDS_TO_HOLD, 
+                        MONEY_PER_VP, ARISTOCRAT_SCORING, CLASS_ALL, MAX_CARDS_ON_BOARD,
+                        PUB_ABILITY, OBSERVATORY_ABILITY, IS_UPGRADABLE,  PLAYER_DRAW_CARD,
+                        PLAYER_DELT_CARD)
 from Player import Player
 
 
@@ -44,7 +42,6 @@ class Game(object):
         self.CreatePlayers()
         self.AssignMarkers()
 
-        
     def CreatePlayers (self):   
         self.Players.append(Player(PLAYER_1, "Mike", PLAYER_GREEN, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 0))
         self.Players.append(Player(PLAYER_2, "Allen", PLAYER_BLUE, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 0))
@@ -56,9 +53,7 @@ class Game(object):
         self.BuildingDeck = Deck (BUILDING_CARDS, BUILDING_CARD_TYPE)
         self.AristocratDeck = Deck (ARISTOCRAT_CARDS, ARISTOCRAT_CARD_TYPE)
         self.TradingDeck = Deck (TRADING_CARDS, TRADING_CARD_TYPE)
-        
-        #self.Decks = [[WORKER_CARD_TYPE, self.WorkerDeck][BUILDING_CARD_TYPE, self.BuildingDeck][ARISTOCRAT_CARD_TYPE, self.AristocratDeck][TRADING_CARD_TYPE, self.TradingDeck]]
-        
+                
         self.BuildingDeck.Shuffle()
         self.WorkerDeck.Shuffle()
         self.AristocratDeck.Shuffle()
@@ -75,9 +70,7 @@ class Game(object):
                                             PLAYERS[1][1] + "-" + MARKERS[self.Players[1].Marker][1] + " : "  + 
                                             PLAYERS[2][1] + "-" + MARKERS[self.Players[2].Marker][1] + " : "  + 
                                             PLAYERS[3][1] + "-" + MARKERS[self.Players[3].Marker][1])
-
-        #self.Players.sort(key=lambda s: s.Marker, reverse=False)
-        
+       
     def DealCards (self, GamePhase):
         print ("Starting to Deal Cards for the " + PHASES[GamePhase][1] + " - Worker Deck Top Card - " + str(self.WorkerDeck.TopCard) + " : Building Deck Top Card - " + str(self.BuildingDeck.TopCard) + " : Aristocrat Deck Top Card - " + str(self.AristocratDeck.TopCard) + " : Trading Deck Top Card - " + str(self.TradingDeck.TopCard))
         print ("Cards to deal: " + str(MAX_CARDS_ON_BOARD - len(self.CardsInPlay)))
@@ -85,6 +78,7 @@ class Game(object):
         if GamePhase == WORKER_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
                 if self.WorkerDeck.TopCard < len (self.WorkerDeck.Cards) :
+                    self.WorkerDeck.Cards[self.WorkerDeck.TopCard].CardStatus = PLAYER_DELT_CARD
                     self.CardsInPlay.append(self.WorkerDeck.Cards[self.WorkerDeck.TopCard])
                     CardsDelt = CardsDelt + " : " + self.WorkerDeck.Cards[self.WorkerDeck.TopCard].CardName 
                     self.WorkerDeck.TopCard += 1
@@ -96,6 +90,7 @@ class Game(object):
         if GamePhase == BUILDING_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
                 if self.BuildingDeck.TopCard < len (self.BuildingDeck.Cards) :
+                    self.BuildingDeck.Cards[self.BuildingDeck.TopCard].CardStatus = PLAYER_DELT_CARD
                     self.CardsInPlay.append(self.BuildingDeck.Cards[self.BuildingDeck.TopCard])
                     CardsDelt = CardsDelt + " : " + self.BuildingDeck.Cards[self.BuildingDeck.TopCard].CardName
                     self.BuildingDeck.TopCard += 1
@@ -107,6 +102,7 @@ class Game(object):
         if GamePhase == ARISTOCRAT_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
                 if self.AristocratDeck.TopCard < len (self.AristocratDeck.Cards) :
+                    self.AristocratDeck.Cards[self.AristocratDeck.TopCard].CardStatus = PLAYER_DELT_CARD
                     self.CardsInPlay.append(self.AristocratDeck.Cards[self.AristocratDeck.TopCard])
                     CardsDelt = CardsDelt + " : " + self.AristocratDeck.Cards[self.AristocratDeck.TopCard].CardName
                     self.AristocratDeck.TopCard += 1
@@ -117,6 +113,7 @@ class Game(object):
         if GamePhase == TRADING_CARD_TYPE :
             while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
                 if self.TradingDeck.TopCard < len (self.TradingDeck.Cards) :
+                    self.TradingDeck.Cards[self.TradingDeck.TopCard].CardStatus = PLAYER_DELT_CARD
                     self.CardsInPlay.append(self.TradingDeck.Cards[self.TradingDeck.TopCard])
                     CardsDelt = CardsDelt + " : " + self.TradingDeck.Cards[self.TradingDeck.TopCard].CardName
                     self.TradingDeck.TopCard += 1
@@ -126,10 +123,24 @@ class Game(object):
                     return 
         print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt)
 
+    def RotateCards (self):
+    
+        CardsDiscarded = ""
+        CardsLowered = ""
+        for Card in self.CardsInPlay[:] :
+            if Card.Row == BOARD_UPPER_ROW :
+                Card.Row = BOARD_LOWER_ROW
+                CardsLowered = CardsLowered + " : " + Card.CardName
+            else :
+                CardsDiscarded = CardsDiscarded + " : " + Card.CardName
+                self.CardsInPlay.remove(Card)
+                
+        print ("Cards moved to the bottom row" +  CardsLowered)
+        print ("Cards discarded from the Game" +  CardsDiscarded)
+    
     def AssignCurrentPhaseOrder (self, Phase):
         
         CurrentPhasePlayers = []
-        
         # Find the player with the right marker
         CurrentPhasePlayers.append(next(Player for Player in self.Players if Player.Marker == Phase))
         SecondPlayerID = (CurrentPhasePlayers[0].ID + 1) % PLAYERS_PER_GAME
@@ -142,8 +153,21 @@ class Game(object):
         
         return CurrentPhasePlayers
     
-
+    def RotateMarkers (self):
+        TempMarker = self.Players[PLAYER_4].Marker 
+        self.Players[PLAYER_4].Marker = self.Players[PLAYER_3].Marker
+        self.Players[PLAYER_3].Marker = self.Players[PLAYER_2].Marker
+        self.Players[PLAYER_2].Marker = self.Players[PLAYER_1].Marker
+        self.Players[PLAYER_1].Marker = TempMarker
+        print ("Markers are Rotated: " +    PLAYERS[PLAYER_1][1] + "-" + MARKERS[self.Players[PLAYER_1].Marker][1] + " : "  + 
+                                            PLAYERS[PLAYER_2][1] + "-" + MARKERS[self.Players[PLAYER_2].Marker][1] + " : "  + 
+                                            PLAYERS[PLAYER_3][1] + "-" + MARKERS[self.Players[PLAYER_3].Marker][1] + " : "  + 
+                                            PLAYERS[PLAYER_4][1] + "-" + MARKERS[self.Players[PLAYER_4].Marker][1])
+        return 
     
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Phase Action Functions
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def ProcessPhaseActions (self, Phase):
         
         # Assign order of play for current phase based on who has the marker.
@@ -153,9 +177,6 @@ class Game(object):
         
             while not (CurrentPhasePlayers[PLAYER_1].hasPassed == True and CurrentPhasePlayers[PLAYER_2].hasPassed == True and CurrentPhasePlayers[PLAYER_3].hasPassed == True and CurrentPhasePlayers[PLAYER_4].hasPassed == True) :
                 for Player in CurrentPhasePlayers :
-                
-                    # CANNOT ASSUME AT THIS POINT THAT INDEX IN CurrentPhasePlayers is the same as Player ID.
-                   
                     # Determine Card Costs here and pass it to Determine Action
                     Player.DetermineCardCosts(self.CardsInPlay)
     
@@ -176,7 +197,6 @@ class Game(object):
                     # Create a list of actions and Objects [[ACTION_BUY][Card],[ACTION_BUY][Card], [ACTION_UPGRADE][Upgrade Card][Replaced Card],[ACTION_HOLD][Card],[ACTION_OBSERVATORY][WORKER_DECK]]
                     Actions = [] 
                     
-                    # Build a list of allowed actions BUY, HOLD, PASS, OBVS, UPGRADE to send to the DetermineAction Function              
                     # Add Buyable Cards to the Actions List
                     for Card in BuyableCards :
                         Actions.append([ACTION_BUY, Card])
@@ -200,7 +220,6 @@ class Game(object):
                     
                     # Give the Actions list to the player and get a decision back
                     PlayerAction, SelectedCard = Player.DetermineAction(Actions)
-                    
                     
                     if PlayerAction == ACTION_BUY :
                         #print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard.CardName)
@@ -229,9 +248,56 @@ class Game(object):
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
 
+    def ProcessBuyAction (self, Player, SelectedCard):
+        
+        if Player.Money >= SelectedCard.DiscountedCost :
+            if SelectedCard.CardStatus == PLAYER_HELD_CARD :
+                print (PLAYERS[Player.ID][1] + " is buying a held card: " + SelectedCard.CardName)
+                Remove_Card_From_Board = False
+            
+            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
+                print (PLAYERS[Player.ID][1] + " is buying a card drawn from the observatory: " + SelectedCard.CardName)
+                Remove_Card_From_Board = False
+            
+            if SelectedCard.CardStatus == PLAYER_DELT_CARD :
+                print (PLAYERS[Player.ID][1] + " is buying a card from the board: " + SelectedCard.CardName)
+                Remove_Card_From_Board = True
+            
+            Player.BuyCard(SelectedCard)
+            
+            # Remove Card from Cards In Play if the Card was not Held or Drawn
+            if Remove_Card_From_Board == True :
+                self.CardsInPlay.remove(SelectedCard)
+
+            Player.Money -= SelectedCard.DiscountedCost
+            
+            print  (PLAYERS[Player.ID][1] + " bought a " + SelectedCard.CardName + " for " + str(SelectedCard.DiscountedCost) + " money. Player Remaining Money: " + str(Player.Money))
+        else :
+            print  (PLAYERS[Player.ID][1] + " could not afford to buy a " + SelectedCard.CardName + ". Player Money: " + str(Player.Money) + " Card Cost: " + str(SelectedCard.DiscountedCost))
+
+    def ProcessHoldAction (self, Player, SelectedCard):
+        
+        if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
+            
+            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
+                print (PLAYERS[Player.ID][1] + " is holding a card from the Observatory: " + SelectedCard.CardName)
+                Remove_Card_From_Board = False
+            
+            if SelectedCard.CardStatus == PLAYER_DELT_CARD :
+                print (PLAYERS[Player.ID][1] + " is holding a card from the board: " + SelectedCard.CardName)
+                Remove_Card_From_Board = True
+            
+            Player.HoldCard(SelectedCard)
+            
+            if Remove_Card_From_Board == True :
+                self.CardsInPlay.remove(SelectedCard)
+
+            print  (PLAYERS[Player.ID][1] + " held a " + SelectedCard.CardName + " : Total held cards - " + str(Player.HeldCards))
+        else :
+            print  (PLAYERS[Player.ID][1] + " attempted to hold a " + SelectedCard.CardName + " : Total held cards - " + str(Player.HeldCards))
+
     def ProcessUpgradeAction (self, Player, SelectedCardPair):
-        Upgrade_Held_Card = False
-        Remove_Card = True
+
         TradingCard = SelectedCardPair[0]
         TargetCard = SelectedCardPair[1]
         
@@ -242,14 +308,17 @@ class Game(object):
         
         if Player.Money >= TradingCardCost :
             if TradingCard.CardStatus == PLAYER_HELD_CARD :
-                Remove_Card = False
+                Remove_Card_From_Board = False
                 
             if TradingCard.CardStatus == PLAYER_DRAW_CARD :
-                Remove_Card = False
+                Remove_Card_From_Board = False
+                
+            if TradingCard.CardStatus == PLAYER_DELT_CARD :
+                Remove_Card_From_Board = True
             
             Player.UpgradeCard(TradingCard, TargetCard)
             
-            if Remove_Card == True :
+            if Remove_Card_From_Board == True :
                 self.CardsInPlay.remove(TradingCard)
 
             Player.Money -= TradingCardCost
@@ -283,12 +352,12 @@ class Game(object):
             Player.DetermineCardCosts (list([SelectedCard]))
             
             # if the player has the money to buy the card add a Buy Action to the actions list
-            if Player.Money >= SelectedCard.DiscountedCost and SelectedCard.CardType == IS_UPGRADABLE :
+            if Player.Money >= SelectedCard.DiscountedCost and SelectedCard.isUpgradable == IS_UPGRADABLE :
                 print  (PLAYERS[Player.ID][1] + " has the option to buy the card : Card Selected -  " + SelectedCard.CardName)
                 Actions.append([ACTION_BUY, SelectedCard])
                 
             # If the player do not have the money to buy the card add a Hold Action to the actions list
-            if Player.Money < SelectedCard.DiscountedCost and SelectedCard.CardType == IS_UPGRADABLE :
+            if Player.Money < SelectedCard.DiscountedCost and SelectedCard.isUpgradable == IS_UPGRADABLE :
                 print  (PLAYERS[Player.ID][1] + " has the option to hold the card : Card Selected -  " + SelectedCard.CardName)
                 Actions.append([ACTION_HOLD, SelectedCard])
             
@@ -296,7 +365,7 @@ class Game(object):
             
             if SelectedCardType == TRADING_CARD_TYPE :
                 for TargetCard in Player.Hand :
-                    if (TargetCard.CardClass == SelectedCard.CardClass and TargetCard.isUpgradable == True) or (SelectedCard.CardType == WORKER_CARD_TYPE and TargetCard.CardClass == CLASS_ALL and TargetCard.isUpgradable == True) :
+                    if (TargetCard.CardClass == SelectedCard.CardClass and TargetCard.isUpgradable == IS_UPGRADABLE and TargetCard.CardStatus == PLAYER_ACTIVE_CARD) or (SelectedCard.CardType == WORKER_CARD_TYPE and TargetCard.CardClass == CLASS_ALL and TargetCard.isUpgradable == IS_UPGRADABLE and TargetCard.CardStatus == PLAYER_ACTIVE_CARD) :
                         # Determine the Upgrade cost and check if the player can afford it
                         TradingCardCost = SelectedCard.DiscountedCost - TargetCard.UpgradeValue
                         if TradingCardCost < 1 :
@@ -310,6 +379,7 @@ class Game(object):
             Actions.append([ACTION_PASS])
             
     
+            # Send the Action List to the Processor to get a decision
             PlayerAction, SelectedCard = Player.DetermineAction(Actions)   
                         
             
@@ -338,56 +408,14 @@ class Game(object):
             return
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
-    
-    def ProcessBuyAction (self, Player, SelectedCard):
-        Remove_Card = True
         
-        if Player.Money >= SelectedCard.DiscountedCost :
-            if SelectedCard.CardStatus == PLAYER_HELD_CARD :
-                print (PLAYERS[Player.ID][1] + " is buying a held card: " + SelectedCard.CardName)
-                Remove_Card = False
-            
-            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
-                print (PLAYERS[Player.ID][1] + " is buying a card drawn from the observatory: " + SelectedCard.CardName)
-                Remove_Card = False
-            
-            
-            Player.BuyCard(SelectedCard)
-            
-            # Remove Card from Cards In Play if the Card was not Held or Drawn
-            if Remove_Card == True :
-                self.CardsInPlay.remove(SelectedCard)
-
-            Player.Money -= SelectedCard.DiscountedCost
-            
-            print  (PLAYERS[Player.ID][1] + " bought a " + SelectedCard.CardName + " for " + str(SelectedCard.DiscountedCost) + " money. Player Remaining Money: " + str(Player.Money))
-        else :
-            print  (PLAYERS[Player.ID][1] + " could not afford to buy a " + SelectedCard.CardName + ". Player Money: " + str(Player.Money) + " Card Cost: " + str(SelectedCard.DiscountedCost))
-    
-    def ProcessHoldAction (self, Player, SelectedCard):
-        
-        # !!! Must add Warehouse here !!!
-        Remove_Card_From_Board = True
-        
-        if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
-            
-            if SelectedCard.CardStatus == PLAYER_DRAW_CARD :
-                Remove_Card_From_Board = False
-            
-            Player.HoldCard(SelectedCard)
-            
-            if Remove_Card_From_Board == True :
-                self.CardsInPlay.remove(SelectedCard)
-
-            print  (PLAYERS[Player.ID][1] + " held a " + SelectedCard.CardName + " : Total held cards - " + str(Player.HeldCards))
-        else :
-            print  (PLAYERS[Player.ID][1] + " attempted to hold a " + SelectedCard.CardName + " : Total held cards - " + str(Player.HeldCards))
-    
-    
     def ProcessPassAction (self, Player):
         Player.Pass()
         print (PLAYERS[Player.ID][1] + " has passed")
     
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # End of Phase and Pub Scoring Functions
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def ProcessPhaseScoring (self, Phase):
         print("Scoring " + PHASES[Phase][1])
         #Process Scores for normal Cards
@@ -396,20 +424,20 @@ class Game(object):
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD):
                     Player.Money += Card.MoneyEarned
                     Player.Score += Card.VPEarned
-                    #print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
         
             # Process Scores for Special Cards
-            Workers = sum (Card.CardType == WORKER_CARD_TYPE for Card in Player.Hand)
-            Aristocrats = sum (Card.CardType == ARISTOCRAT_CARD_TYPE for Card in Player.Hand)
+            Workers = sum ((Card.CardType == WORKER_CARD_TYPE and Card.CardStatus == PLAYER_ACTIVE_CARD) for Card in Player.Hand)
+            Aristocrats = sum ((Card.CardType == ARISTOCRAT_CARD_TYPE and Card.CardStatus == PLAYER_ACTIVE_CARD) for Card in Player.Hand)
             for Card in Player.Hand :
                 # Tax Man
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD and Card.CardID == TAX_MAN_ID):
                     Player.Money += Workers
-                    #print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
                 # Mariinskij Theater
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD and Card.CardID == MARIINSKIJ_THEATER_ID):
                     Player.Money += Aristocrats       
-                    #print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
         
         # Process Pub point Buying and reset the Used Observatory attribute
         if Phase == PHASE_BUILDING :
@@ -444,6 +472,13 @@ class Game(object):
         return
     
     
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # End of Game Scoring Functions
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------
+    def ProcessEndofGameActions (self):
+        self.ProcessAristocratScoring()
+        self.ProcessPointBuying()
+        self.ProcessPointReductions()
     
     def ProcessAristocratScoring (self):
         
@@ -474,40 +509,9 @@ class Game(object):
         
         return
     
-    def ProcessEndofGameActions (self):
-        self.ProcessAristocratScoring()
-        self.ProcessPointBuying()
-        self.ProcessPointReductions()
+
     
-    def RotateCards (self):
-        CardsDiscarded = ""
-        CardsLowered = ""
-        for Card in self.CardsInPlay[:] :
-            if Card.Row == BOARD_UPPER_ROW :
-                Card.Row = BOARD_LOWER_ROW
-                CardsLowered = CardsLowered + " : " + Card.CardName
-            else :
-                CardsDiscarded = CardsDiscarded + " : " + Card.CardName
-                self.CardsInPlay.remove(Card)
-                
-        print ("Cards moved to the bottom row" +  CardsLowered)
-        print ("Cards discarded from the Game" +  CardsDiscarded)
-    
-    def RotateMarkers (self):
-        TempMarker = self.Players[PLAYER_4].Marker 
-        self.Players[PLAYER_4].Marker = self.Players[PLAYER_3].Marker
-        self.Players[PLAYER_3].Marker = self.Players[PLAYER_2].Marker
-        self.Players[PLAYER_2].Marker = self.Players[PLAYER_1].Marker
-        self.Players[PLAYER_1].Marker = TempMarker
-        print ("Markers are Rotated: " +    PLAYERS[PLAYER_1][1] + "-" + MARKERS[self.Players[PLAYER_1].Marker][1] + " : "  + 
-                                            PLAYERS[PLAYER_2][1] + "-" + MARKERS[self.Players[PLAYER_2].Marker][1] + " : "  + 
-                                            PLAYERS[PLAYER_3][1] + "-" + MARKERS[self.Players[PLAYER_3].Marker][1] + " : "  + 
-                                            PLAYERS[PLAYER_4][1] + "-" + MARKERS[self.Players[PLAYER_4].Marker][1])
-        return 
-            
-         
-    
-    
+
         
 
                 
