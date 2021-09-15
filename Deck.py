@@ -1,15 +1,12 @@
-'''
-Created on Aug 25, 2021
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# St. Petersburg Machine Learning Simulation
+# Deck Class - Contains Cards
+# Author: Mike Slaugh
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@author: mikes
-'''
 from Card import Card
-from _ast import Lambda
-
-
 
 class Deck(object):
-    
     
     def __init__(self, CardDefs, DeckType):
         x = 0

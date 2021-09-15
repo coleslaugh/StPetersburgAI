@@ -1,8 +1,9 @@
-'''
-Created on Aug 25, 2021
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# St. Petersburg Machine Learning Simulation
+# Player Class - Contains Cards and Player Attributes
+# Author: Mike Slaugh
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-@author: mikes
-'''
 import sys
 
 from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PASS, PLAYERS,\
