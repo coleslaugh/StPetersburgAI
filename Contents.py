@@ -115,6 +115,7 @@ ACTION_DISCARD = 6
 
 MAX_CARDS_ON_BOARD = 8
 MAX_CARDS_TO_HOLD = 3
+MAX_POINTS_TO_BUY = 5
 
 #--------------------------------------------------------------------------
 # Card IDs
@@ -487,5 +488,39 @@ TRADING_CARDS = [[CARPENTER_WORKSHOP_CARD, 1],
 PLAYERS = [[PLAYER_1, "Player 1"], [PLAYER_2, "Player 2"], [PLAYER_3, "Player 3"], [PLAYER_4, "Player 4"]]
 PLAYER_COLORS = [[PLAYER_GREEN, "Green"], [PLAYER_BLUE, "Blue"], [PLAYER_YELLOW, "Yellow"], [PLAYER_RED, "Red"]]
 PHASES = [[PHASE_WORKER, "Worker Phase"], [PHASE_BUILDING, "Building Phase"], [PHASE_ARISTOCRAT, "Aristocrat Phase"], [PHASE_TRADING, "Trading Card Phase"]]
-ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"],[ACTION_UPGRADE, "Upgrade"],[ACTION_PUB, "Use the Pub"]]
+ACTIONS = [[ACTION_BUY, "Buy"], [ACTION_HOLD, "Hold"], [ACTION_PASS, "Pass"],[ACTION_UPGRADE, "Upgrade"],[ACTION_OBSERVATORY, "Observatory"], [ACTION_PUB, "Use the Pub"] ]
 MARKERS = [[PLAYER_MARKER_WORKER, "Worker Token"], [PLAYER_MARKER_BUIDLING, "Building Token"], [PLAYER_MARKER_ARISTOCRAT, "Aristocrat Token"], [PLAYER_MARKER_TRADING, "Trading Card Token"]]
+DECKS = [[WORKER_CARDS, "Worker Deck"], [BUILDING_CARDS, "Building Deck"], [ARISTOCRAT_CARDS, "Aristocrat Deck"], [TRADING_CARDS, "Trading Deck"]]
+CARD_TYPES = [[WORKER_CARD_TYPE, "Worker Card"], [BUILDING_CARD_TYPE, "Building Card"], [ARISTOCRAT_CARD_TYPE, "Aristocrat Card"], [TRADING_CARD_TYPE, "Trading Card"]]
+
+#--------------------------------------------------------------------------
+# Brain Constants
+#--------------------------------------------------------------------------
+BRAIN_PHASES = ["W","B","A","T"]
+BRAIN_ROUNDS = ["1","2","3","4","5","6","L"]
+
+BRAIN_DEFAULT_VALUE = 10
+BRAIN_PASS_DEFAULT_VAULE = 20
+
+
+BRAIN_REWARD_BANDS = 10
+BRAIN_REWARD_INCREMENT = 2
+
+BRAIN_PENALTY_BANDS = 10
+BRAIN_PENALTY_INCREMENT = -1
+
+BRAIN_EPSILON = 0.2
+BRAIN_EPSILON_INCREMENT = 0
+BRAIN_EPSILON_INCREMENT_INTERVAL = 100
+BRAIN_EPSILON_MAX = 1
+BRAIN_EPSILON_MIN = 0
+
+BRAIN_TARGET_SCORE = 50
+BRAIN_TARGET_SCORE_INCREMENT_INTERVAL = 1000
+BRAIN_TARGET_SCORE_INCREMENT = 0
+
+
+
+
+
+

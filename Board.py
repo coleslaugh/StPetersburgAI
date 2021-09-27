@@ -16,6 +16,7 @@ from Contents import *
 
 from MainWindow import Ui_MainWindow
 
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Worker Class
 # Function to Run the Game
@@ -30,6 +31,19 @@ class Worker (QObject):
     def __init__(self, total_games):
         self.Total_Games = total_games
         self.sleep_between_phases = 0.02
+        self.epsilon = BRAIN_EPSILON
+        self.epsilon_increment_interval = BRAIN_EPSILON_INCREMENT_INTERVAL
+        self.epsilon_increment = BRAIN_EPSILON_INCREMENT
+        self.epsilon_max = BRAIN_EPSILON_MAX
+        self.epsilon_min = BRAIN_EPSILON_MIN
+        self.target_score = BRAIN_TARGET_SCORE
+        self.target_score_increment = BRAIN_TARGET_SCORE_INCREMENT
+        self.target_score_increment_interval = BRAIN_TARGET_SCORE_INCREMENT_INTERVAL
+        self.reward_bands = BRAIN_REWARD_BANDS
+        self.reward_increment = BRAIN_REWARD_INCREMENT
+        self.penalty_bands = BRAIN_PENALTY_BANDS
+        self.penalty_increment = BRAIN_PENALTY_INCREMENT
+
         super().__init__()
     
     def RunGame (self):
@@ -42,6 +56,25 @@ class Worker (QObject):
                 
                 self.New_Game = Game (Current_Game_Count)
                 self.New_Game.GameSetup()
+                
+                # Setup initial values for the brain
+                for Player in self.New_Game.Players :                  
+                    Player.Brain.InitializeBrain (self.epsilon, self.epsilon_increment, self.epsilon_max, self.epsilon_min, self.target_score, self.reward_bands, self.reward_increment, self.penalty_bands, self.penalty_increment)
+                
+                # Reset Target values every N games
+                if Current_Game_Count % self.target_score_increment_interval == 0:
+                    self.target_score += self.target_score_increment
+                    self.refreshgamestatus.emit ("Updating Brains: Target Score - " + str(self.target_score))
+                    for Player in self.New_Game.Players :
+                        Player.Brain.UpdateTargetScore (self.target_score, self.reward_bands, self.reward_increment, self.penalty_bands, self.penalty_increment) 
+   
+                # Adjust epsilon every N games
+                if Current_Game_Count % self.epsilon_increment_interval == 0:
+                    self.epsilon += self.epsilon_increment
+                    self.refreshgamestatus.emit ("Updating Brains: Epsilon - " + str(self.epsilon))
+                    for Player in self.New_Game.Players :
+                        Player.Brain.UpdateEpsilon (self.epsilon, self.epsilon_max, self.epsilon_min)
+                
                 self.adddeckstogame[Game].emit (self.New_Game)
                 self.refreshboard[Game].emit(self.New_Game)
                 Round_Count = 1
@@ -51,28 +84,28 @@ class Worker (QObject):
                     print("----------------------------------------------- Starting Round "+ str(Round_Count) + "  -----------------------------------------------")
                     print("----------------------- Starting Worker Phase -----------------------")
                     self.New_Game.DealCards(WORKER_CARD_TYPE)
-                    self.New_Game.ProcessPhaseActions(PHASE_WORKER)
+                    self.New_Game.ProcessPhaseActions(PHASE_WORKER, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_WORKER)
                     self.refreshboard[Game].emit(self.New_Game)
                     time.sleep(self.sleep_between_phases)
         
                     print("----------------------- Starting Building Phase -----------------------")
                     self.New_Game.DealCards (BUILDING_CARD_TYPE)
-                    self.New_Game.ProcessPhaseActions(PHASE_BUILDING)
+                    self.New_Game.ProcessPhaseActions(PHASE_BUILDING, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_BUILDING)
                     self.refreshboard[Game].emit(self.New_Game)
                     time.sleep(self.sleep_between_phases)
             
                     print("----------------------- Starting Aristocrat Phase -----------------------")
                     self.New_Game.DealCards (ARISTOCRAT_CARD_TYPE)
-                    self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT)
+                    self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
                     self.refreshboard[Game].emit(self.New_Game)
                     time.sleep(self.sleep_between_phases)
             
                     print("----------------------- Starting Trading Phase -----------------------")
                     self.New_Game.DealCards (TRADING_CARD_TYPE)
-                    self.New_Game.ProcessPhaseActions(PHASE_TRADING)
+                    self.New_Game.ProcessPhaseActions(PHASE_TRADING, Round_Count)
                     self.refreshboard[Game].emit(self.New_Game)
                     time.sleep(self.sleep_between_phases)
                     
@@ -82,18 +115,20 @@ class Worker (QObject):
                     self.refreshboard[Game].emit(self.New_Game)
                     time.sleep(self.sleep_between_phases)
     
-                    #self.New_Game.RotatePlayers ()
                     print("----------------------------------------------- Completed Round "+ str(Round_Count) + " -----------------------------------------------")
-                    #self.listStatus.addItem(QListWidgetItem("Completed Round "+ str(Round_Count)))
                     
                     Round_Count += 1
-                    
-
-                
+                                    
                 print ("----------------------- Processing final point adjustments -----------------------")
                 
                 self.New_Game.ProcessEndofGameActions()
                 self.refreshboard[Game].emit(self.New_Game)
+                time.sleep(.5)
+                # Only Save the brain in the simulation is still exploring
+                if self.epsilon > 0.01 :
+                    self.New_Game.SavePlayersBrains()
+                self.refreshboard[Game].emit(self.New_Game)
+                time.sleep(self.sleep_between_phases)
                 self.refreshgamestatus.emit ("Completed Game " + str(Current_Game_Count))
                 
                 print("------------------------------------------------------------- Game " + str(Current_Game_Count) + " Completed -------------------------------------------------------------")
@@ -113,7 +148,7 @@ class Board(Ui_MainWindow):
     def SetupBoard (self):
 
         # Sets up lists of objects the application will be interacting with
-        
+       
         self.CardSlots = []
         self.CardSlots.append([self.Card_Upper_1, self.Card_Lower_1])
         self.CardSlots.append([self.Card_Upper_2, self.Card_Lower_2])
@@ -196,6 +231,7 @@ class Board(Ui_MainWindow):
     
     def RefreshGameStatus (self, Game_Message):
         self.listStatus.addItem(QListWidgetItem(Game_Message))
+        self.listStatus.scrollToBottom()
     
     def RefreshPlayerIDs (self, New_Game):
         self.groupBoxPlayer1.setTitle("PLayer 1 - " + New_Game.Players[0].Name + " ID: " + str(New_Game.Players[0].ID))

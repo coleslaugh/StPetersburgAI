@@ -14,11 +14,15 @@ from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PA
     PUB_ABILITY, ACTION_OBSERVATORY, ACTION_PUB, OBSERVATORY_ABILITY,\
     NUM_CARDS_WORKER_DECK, NUM_CARDS_BUILDING_DECK, NUM_CARDS_ARISTOCRAT_DECK,\
     NUM_CARDS_TRADING_DECK, PLAYER_DELT_CARD, PLAYER_DRAW_CARD
+
+from Brain import Brain
 from random import randint
+
 
 class Player(object):
       
     def __init__(self, ID, Name ,Color, Money, Score, Marker):
+        
         self.ID = ID
         self.Name = Name
         self.Color = Color
@@ -33,6 +37,8 @@ class Player(object):
         self.UsedObservatory = False
         self.PubBonus = 0
         self.UniqueAristrocrats = 0
+        self.Brain = Brain (self.ID)
+        self.ActionsTaken = []
         
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions to Buy, Hold, Upgrade and Pass Cards
@@ -190,7 +196,7 @@ class Player(object):
         for Card in CardsInPlay :
             if Card.DiscountedCost > self.Money and Card.isUpgradable == IS_UPGRADABLE :
                 HoldableCards.append(Card)
-            if Card.CardType  == TRADING_CARD_TYPE :
+            if Card.isUpgradable == IS_NOT_UPGRADABLE :
                 HoldableCards.append(Card)
         
         return HoldableCards    
@@ -257,10 +263,11 @@ class Player(object):
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Function to determine what action the player takes
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
-    def DetermineAction(self, Actions):
+    def DetermineAction(self, Actions, CurrentRound, CurrentPhase, EndOfGame):
     
         # The AI Brain will need to be called here instead of the random call
-        SelectedAction = Actions [randint(0, len(Actions)-1)]
+        SelectedAction = self.Brain.SelectBestAction(Actions, CurrentRound, CurrentPhase, EndOfGame)
+        self.ActionsTaken.append ([SelectedAction, CurrentRound, CurrentPhase, EndOfGame])
         
         if SelectedAction[0] == ACTION_BUY :
             #print(PLAYERS[self.ID][1] + " decided to buy " + SelectedAction[1].CardName)
@@ -280,3 +287,10 @@ class Player(object):
         
         if SelectedAction[0] == ACTION_PASS :
             return ACTION_PASS, []
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function to Save the Brain Rewards at the end of the game
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+    def SaveBrain (self):
+        self.Brain.UpdateRewards (self.ActionsTaken, self.Score)
+        self.Brain.SaveBrain()

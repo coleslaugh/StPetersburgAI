@@ -37,6 +37,9 @@ class Game(object):
         self.Players = []
         self.EndOfGame = False
         self.NumPlayers = PLAYERS_PER_GAME
+        self.CurrentRound = 0
+        self.CurrentPhase = 0
+
                 
     def GameSetup (self):
         self.CreateDecks()
@@ -169,11 +172,12 @@ class Game(object):
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Phase Action Functions
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
-    def ProcessPhaseActions (self, Phase):
+    def ProcessPhaseActions (self, Phase, Round_Count):
         
         # Assign order of play for current phase based on who has the marker.
         CurrentPhasePlayers = self.AssignCurrentPhaseOrder(Phase)
-        
+        self.CurrentRound = Round_Count
+        self.CurrentPhase = Phase
         try :
         
             while not (CurrentPhasePlayers[PLAYER_1].hasPassed == True and CurrentPhasePlayers[PLAYER_2].hasPassed == True and CurrentPhasePlayers[PLAYER_3].hasPassed == True and CurrentPhasePlayers[PLAYER_4].hasPassed == True) :
@@ -220,7 +224,7 @@ class Game(object):
                     Actions.append ([ACTION_PASS])
                     
                     # Give the Actions list to the player and get a decision back
-                    PlayerAction, SelectedCard = Player.DetermineAction(Actions)
+                    PlayerAction, SelectedCard = Player.DetermineAction(Actions, self.CurrentRound, self.CurrentPhase, self.EndOfGame)
                     
                     if PlayerAction == ACTION_BUY :
                         #print  (PLAYERS[Player.ID][1] + "  has chosen to " + ACTIONS[PlayerAction][1] + " a " + SelectedCard.CardName)
@@ -359,8 +363,9 @@ class Game(object):
                 
             # If the player do not have the money to buy the card add a Hold Action to the actions list
             if Player.Money < SelectedCard.DiscountedCost and SelectedCard.isUpgradable == IS_UPGRADABLE :
-                print  (PLAYERS[Player.ID][1] + " has the option to hold the card : Card Selected -  " + SelectedCard.CardName)
-                Actions.append([ACTION_HOLD, SelectedCard])
+                if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
+                    print  (PLAYERS[Player.ID][1] + " has the option to hold the card : Card Selected -  " + SelectedCard.CardName)
+                    Actions.append([ACTION_HOLD, SelectedCard])
             
             # Add Actions if the card was a Trading Card
             
@@ -381,7 +386,7 @@ class Game(object):
             
     
             # Send the Action List to the Processor to get a decision
-            PlayerAction, SelectedCard = Player.DetermineAction(Actions)   
+            PlayerAction, SelectedCard = Player.DetermineAction(Actions, self.CurrentRound, self.CurrentPhase, self.EndOfGame)   
                         
             
             if PlayerAction == ACTION_BUY :
@@ -405,7 +410,8 @@ class Game(object):
                 
             Player.Score -= 1
             Player.UsedObservatory = True
-
+            print (PLAYERS[Player.ID][1] + " is losing a point for using the Observatory. Will get it back in the scoring round. New Score: " + str(Player.Score))
+            
             return
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
@@ -434,11 +440,11 @@ class Game(object):
                 # Tax Man
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD and Card.CardID == TAX_MAN_ID):
                     Player.Money += Workers
-                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Workers) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
                 # Mariinskij Theater
                 if (Card.CardType == Phase and Card.CardStatus == PLAYER_ACTIVE_CARD and Card.CardID == MARIINSKIJ_THEATER_ID):
                     Player.Money += Aristocrats       
-                    print(PLAYERS[Player.ID][1] + " earned " + str(Card.MoneyEarned) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
+                    print(PLAYERS[Player.ID][1] + " earned " + str(Aristocrats) + " money and scored " + str(Card.VPEarned) + " VP using a " + Card.CardName + ". New Money: " + str(Player.Money) + " New Score: " + str(Player.Score))
         
         # Process Pub point Buying and reset the Used Observatory attribute
         if Phase == PHASE_BUILDING :
@@ -464,7 +470,7 @@ class Game(object):
                         Actions.append ([ACTION_PUB, x])
                     
                 # Give the Actions list to the player and get a decision back
-                PlayerAction, Points = Player.DetermineAction(Actions)
+                PlayerAction, Points = Player.DetermineAction(Actions, self.CurrentRound, self.CurrentPhase, self.EndOfGame)
                 
                 if PlayerAction == ACTION_PUB :
                     Player.Money -= (Points * 2)
@@ -511,7 +517,10 @@ class Game(object):
         return
     
 
-    
+    def SavePlayersBrains (self):
+        for Player in self.Players :
+            Player.SaveBrain()
+        
 
         
 
