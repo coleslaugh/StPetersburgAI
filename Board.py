@@ -7,15 +7,21 @@
 
 import sys
 import time
+import math
 
-from PyQt5.Qt import QListWidgetItem, QPixmap, QObject, pyqtSignal,\
-    QThread
+from PyQt5.Qt import QListWidgetItem, QPixmap, QObject, pyqtSignal, QThread
 
 from Game import Game
-from Contents import *
+from Contents import PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, PLAYER_COLORS, PLAYER_ACTIVE_CARD, \
+    PHASES, PHASE_WORKER, PHASE_BUILDING, PHASE_ARISTOCRAT, PHASE_TRADING,\
+    DEFAULT_GAMES_PER_SESSION, BRAIN_EPSILON, BRAIN_EPSILON_INCREMENT,\
+    BRAIN_EPSILON_INCREMENT_INTERVAL, BRAIN_EPSILON_MAX, BRAIN_EPSILON_MIN,\
+    BRAIN_REWARD_VALUE, BRAIN_REWARD_BANDS, BRAIN_PENALTY_VALUE,\
+    BRAIN_PENALTY_BANDS, BRAIN_TARGET_SCORE, BRAIN_TARGET_SCORE_INCREMENT,\
+    BRAIN_DEFAULT_VALUE, BRAIN_PASS_DEFAULT_VAULE, BRAIN_RESET_INTERVAL,\
+    BRAIN_TARGET_SCORE_INCREMENT_INTERVAL
 
 from MainWindow import Ui_MainWindow
-
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Worker Class
@@ -31,19 +37,26 @@ class Worker (QObject):
     def __init__(self, total_games):
         self.Total_Games = total_games
         self.sleep_between_phases = 0.02
-        self.epsilon = BRAIN_EPSILON
-        self.epsilon_increment_interval = BRAIN_EPSILON_INCREMENT_INTERVAL
-        self.epsilon_increment = BRAIN_EPSILON_INCREMENT
-        self.epsilon_max = BRAIN_EPSILON_MAX
-        self.epsilon_min = BRAIN_EPSILON_MIN
-        self.target_score = BRAIN_TARGET_SCORE
-        self.target_score_increment = BRAIN_TARGET_SCORE_INCREMENT
-        self.target_score_increment_interval = BRAIN_TARGET_SCORE_INCREMENT_INTERVAL
-        self.reward_bands = BRAIN_REWARD_BANDS
-        self.reward_increment = BRAIN_REWARD_INCREMENT
-        self.penalty_bands = BRAIN_PENALTY_BANDS
-        self.penalty_increment = BRAIN_PENALTY_INCREMENT
-
+        self.episode_avg_scores = [[PLAYER_1,0,0],[PLAYER_2,0,0],[PLAYER_3,0,0],[PLAYER_4,0,0]]
+        
+        self.Brain_Settings = {
+            'Epsilon':0, 
+            'Epsilon Increment' : 0, 
+            'Epsilon Increment Interval' : 0,
+            'Epsilon Max' : 0,
+            'Epsilon Min' : 0,
+            'Reward Value' : 0,
+            'Reward Bands' : 0,
+            'Penalty Value' : 0,
+            'Penalty Bands' : 0,
+            'Target Score' : 0,
+            'Target Score Increment' : 0,
+            'Target Score Increment Interval' : 0,
+            'Default Action Value' : 0,
+            'Default Pass Value' : 0,
+            'Brain Reset Interval' : 0
+            }
+        
         super().__init__()
     
     def RunGame (self):
@@ -54,28 +67,30 @@ class Worker (QObject):
             while Current_Game_Count <= self.Total_Games : 
                 print("------------------------------------------------------------- Starting Game "+ str(Current_Game_Count) + " -------------------------------------------------------------")
                 
+                # Create and Setup a new Game
                 self.New_Game = Game (Current_Game_Count)
                 self.New_Game.GameSetup()
                 
-                # Setup initial values for the brain
+                # Setup initial values for the Player's brains
                 for Player in self.New_Game.Players :                  
-                    Player.Brain.InitializeBrain (self.epsilon, self.epsilon_increment, self.epsilon_max, self.epsilon_min, self.target_score, self.reward_bands, self.reward_increment, self.penalty_bands, self.penalty_increment)
-                
-                # Reset Target values every N games
-                if Current_Game_Count % self.target_score_increment_interval == 0:
-                    self.target_score += self.target_score_increment
-                    self.refreshgamestatus.emit ("Updating Brains: Target Score - " + str(self.target_score))
+                    Player.Brain.InitializeBrain (self.Brain_Settings)
+
+                # Adjust Target Score every N games
+                if Current_Game_Count % self.Brain_Settings['Target Score Increment Interval'] == 0:
+                    self.Brain_Settings['Target Score'] += self.Brain_Settings['Target Score Increment']
+                    self.refreshgamestatus.emit ("Updating Brains: Target Score - " + str(self.Brain_Settings['Target Score']))
                     for Player in self.New_Game.Players :
-                        Player.Brain.UpdateTargetScore (self.target_score, self.reward_bands, self.reward_increment, self.penalty_bands, self.penalty_increment) 
+                        Player.Brain.UpdateTargetScore (self.Brain_Settings) 
    
-                # Adjust epsilon every N games
-                if Current_Game_Count % self.epsilon_increment_interval == 0:
-                    self.epsilon += self.epsilon_increment
-                    self.refreshgamestatus.emit ("Updating Brains: Epsilon - " + str(self.epsilon))
+                # Adjust epsilon value every N games
+                if Current_Game_Count % self.Brain_Settings['Epsilon Increment Interval'] == 0:
+                    self.Brain_Settings['Epsilon'] += self.Brain_Settings['Epsilon Increment']
+                    self.refreshgamestatus.emit ("Updating Brains: Epsilon - " + str(self.Brain_Settings['Epsilon']))
                     for Player in self.New_Game.Players :
-                        Player.Brain.UpdateEpsilon (self.epsilon, self.epsilon_max, self.epsilon_min)
+                        Player.Brain.UpdateEpsilon (self.Brain_Settings)
                 
-                self.adddeckstogame[Game].emit (self.New_Game)
+                # Update the UI
+                self.adddeckstogame[Game].emit(self.New_Game)
                 self.refreshboard[Game].emit(self.New_Game)
                 Round_Count = 1
                 
@@ -83,37 +98,37 @@ class Worker (QObject):
 
                     print("----------------------------------------------- Starting Round "+ str(Round_Count) + "  -----------------------------------------------")
                     print("----------------------- Starting Worker Phase -----------------------")
-                    self.New_Game.DealCards(WORKER_CARD_TYPE)
+                    self.New_Game.DealCards(PHASE_WORKER)
                     self.New_Game.ProcessPhaseActions(PHASE_WORKER, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_WORKER)
-                    self.refreshboard[Game].emit(self.New_Game)
-                    time.sleep(self.sleep_between_phases)
-        
+                    #self.refreshboard[Game].emit(self.New_Game)
+                    #time.sleep(self.sleep_between_phases)
+                                        
                     print("----------------------- Starting Building Phase -----------------------")
-                    self.New_Game.DealCards (BUILDING_CARD_TYPE)
+                    self.New_Game.DealCards (PHASE_BUILDING)
                     self.New_Game.ProcessPhaseActions(PHASE_BUILDING, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_BUILDING)
-                    self.refreshboard[Game].emit(self.New_Game)
-                    time.sleep(self.sleep_between_phases)
+                    #self.refreshboard[Game].emit(self.New_Game)
+                    #time.sleep(self.sleep_between_phases)                    
             
                     print("----------------------- Starting Aristocrat Phase -----------------------")
-                    self.New_Game.DealCards (ARISTOCRAT_CARD_TYPE)
+                    self.New_Game.DealCards (PHASE_ARISTOCRAT)
                     self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
-                    self.refreshboard[Game].emit(self.New_Game)
-                    time.sleep(self.sleep_between_phases)
+                    #self.refreshboard[Game].emit(self.New_Game)
+                    #time.sleep(self.sleep_between_phases)    
             
                     print("----------------------- Starting Trading Phase -----------------------")
-                    self.New_Game.DealCards (TRADING_CARD_TYPE)
+                    self.New_Game.DealCards (PHASE_TRADING)
                     self.New_Game.ProcessPhaseActions(PHASE_TRADING, Round_Count)
-                    self.refreshboard[Game].emit(self.New_Game)
-                    time.sleep(self.sleep_between_phases)
+                    #self.refreshboard[Game].emit(self.New_Game)
+                    #time.sleep(self.sleep_between_phases)
                     
                     print("----------------------- Round Cleanup -----------------------")
                     self.New_Game.RotateCards ()
                     self.New_Game.RotateMarkers ()
                     self.refreshboard[Game].emit(self.New_Game)
-                    time.sleep(self.sleep_between_phases)
+                    #time.sleep(self.sleep_between_phases)
     
                     print("----------------------------------------------- Completed Round "+ str(Round_Count) + " -----------------------------------------------")
                     
@@ -122,28 +137,44 @@ class Worker (QObject):
                 print ("----------------------- Processing final point adjustments -----------------------")
                 
                 self.New_Game.ProcessEndofGameActions()
-                self.refreshboard[Game].emit(self.New_Game)
-                time.sleep(.5)
-                # Only Save the brain in the simulation is still exploring
-                if self.epsilon > 0.01 :
-                    self.New_Game.SavePlayersBrains()
-                self.refreshboard[Game].emit(self.New_Game)
-                time.sleep(self.sleep_between_phases)
-                self.refreshgamestatus.emit ("Completed Game " + str(Current_Game_Count))
                 
+                # Update Players Average Score
+                self.episode_avg_scores = self.New_Game.UpdateAvgScores(self.episode_avg_scores)
+                
+                self.refreshgamestatus.emit ("Completed Game " + str(Current_Game_Count))
+                self.refreshboard[Game].emit(self.New_Game)
+                
+                # Only Save the brain in the simulation is still exploring
+                if self.Brain_Settings['Epsilon'] > 0.01 :
+                    self.New_Game.SavePlayersBrains()
+                    
+                    # Replace the poorest performing Brains with the Best performing Brain every N games
+                    if Current_Game_Count % self.Brain_Settings['Brain Reset Interval'] == 0:
+                        self.New_Game.ResetPlayersBrains(self.episode_avg_scores)
+                        self.refreshgamestatus.emit ("Refreshing Player Brains: " + str (self.episode_avg_scores))
+                        #Reset the Average Score Counter
+                        self.episode_avg_scores = [[PLAYER_1,0,0],[PLAYER_2,0,0],[PLAYER_3,0,0],[PLAYER_4,0,0]]
+
+                time.sleep(.3)
+                                
                 print("------------------------------------------------------------- Game " + str(Current_Game_Count) + " Completed -------------------------------------------------------------")
              
                 Current_Game_Count += 1
             
             print("------------------------------------------------------------- Simulation Completed -------------------------------------------------------------")
             self.finished.emit()    
+        
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
 
     def flush (self):
         pass
 
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Board Class
+# Establishes UI elements and Threads
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
 class Board(Ui_MainWindow):
     def SetupBoard (self):
 
@@ -176,7 +207,26 @@ class Board(Ui_MainWindow):
             self.CardSlots[x][1].setScaledContents(True)
 
         self.lineNumGames.setText(str(DEFAULT_GAMES_PER_SESSION))
-
+        self.lineEpsilon_Value.setText(str (BRAIN_EPSILON))
+        self.lineEpsilon_Increment.setText(str(BRAIN_EPSILON_INCREMENT))
+        self.lineEpsilon_Interval.setText(str(BRAIN_EPSILON_INCREMENT_INTERVAL))
+        self.lineEpsilon_Max.setText(str(BRAIN_EPSILON_MAX))
+        self.lineEpsilon_Min.setText(str(BRAIN_EPSILON_MIN))
+        
+        self.lineReward_Value.setText(str(BRAIN_REWARD_VALUE))
+        self.lineReward_Bands.setText(str(BRAIN_REWARD_BANDS))
+        
+        self.linePenalty_Value.setText(str(BRAIN_PENALTY_VALUE))
+        self.linePenalty_Bands.setText(str(BRAIN_PENALTY_BANDS))
+        
+        self.lineTarget_Value.setText(str(BRAIN_TARGET_SCORE))
+        self.lineTarget_Increment.setText(str(BRAIN_TARGET_SCORE_INCREMENT))
+        self.lineTarget_Interval.setText(str(BRAIN_TARGET_SCORE_INCREMENT_INTERVAL))
+        
+        self.lineBrain_Default.setText(str(BRAIN_DEFAULT_VALUE))
+        self.lineBrain_Pass_Default.setText(str(BRAIN_PASS_DEFAULT_VAULE))
+        self.lineBrain_Reset_Interval.setText(str(BRAIN_RESET_INTERVAL))
+        
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions to setup and run the game
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -189,6 +239,8 @@ class Board(Ui_MainWindow):
             
             self.thread = QThread ()
             self.worker = Worker (int(self.lineNumGames.text()))
+            self.InitilizeWorkerSettings()
+            
             self.worker.moveToThread(self.thread)
             
             self.thread.started.connect(self.worker.RunGame)
@@ -207,6 +259,30 @@ class Board(Ui_MainWindow):
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
               
+    def InitilizeWorkerSettings (self):
+        
+        self.worker.Brain_Settings['Epsilon'] = float(self.lineEpsilon_Value.text ())
+        self.worker.Brain_Settings['Epsilon Increment'] = float(self.lineEpsilon_Increment.text ())
+        self.worker.Brain_Settings['Epsilon Increment Interval'] = int(self.lineEpsilon_Interval.text ())
+        self.worker.Brain_Settings['Epsilon Max'] = int(self.lineEpsilon_Max.text())
+        self.worker.Brain_Settings['Epsilon Min'] = int(self.lineEpsilon_Min.text())
+        
+        self.worker.Brain_Settings['Reward Value'] = int(self.lineReward_Value.text())
+        self.worker.Brain_Settings['Reward Bands'] = int(self.lineReward_Bands.text())
+        
+        self.worker.Brain_Settings['Penalty Value'] = int(self.linePenalty_Value.text())
+        self.worker.Brain_Settings['Penalty Bands'] = int(self.linePenalty_Bands.text())
+        
+        self.worker.Brain_Settings['Target Score'] = int(self.lineTarget_Value.text())
+        self.worker.Brain_Settings['Target Score Increment'] = int(self.lineTarget_Increment.text())
+        self.worker.Brain_Settings['Target Score Increment Interval'] = int(self.lineTarget_Interval.text())
+        
+        self.worker.Brain_Settings['Default Action Value'] = int(self.lineBrain_Default.text())
+        self.worker.Brain_Settings['Default Pass Value'] = int(self.lineBrain_Pass_Default.text())
+        self.worker.Brain_Settings['Brain Reset Interval'] = int(self.lineBrain_Reset_Interval.text())
+        
+        return 
+    
     def AddDeckstoGameBoard (self, New_Game):
         
         #self.listStatus.addItem(QListWidgetItem("Adding Worker Deck to Board"))
@@ -321,13 +397,15 @@ class Board(Ui_MainWindow):
     def RefreshVictoryPoints (self, New_Game):
         for Player in New_Game.Players :
             if Player.ID == PLAYER_1 :
-                self.lblVP_Player1.setText("Victory Points: " + str(Player.Score))
+                self.lblVP_Player1.setText("Victory Points: " + str(Player.Score) + " - Avg : " + str(math.trunc(Player.AverageScore)))
             if Player.ID == PLAYER_2 :
-                self.lblVP_Player2.setText("Victory Points: " + str(Player.Score))
+                self.lblVP_Player2.setText("Victory Points: " + str(Player.Score) + " - Avg : " + str(math.trunc(Player.AverageScore)))
             if Player.ID == PLAYER_3 :
-                self.lblVP_Player3.setText("Victory Points: " + str(Player.Score))
+                self.lblVP_Player3.setText("Victory Points: " + str(Player.Score) + " - Avg : " + str(math.trunc(Player.AverageScore)))
             if Player.ID == PLAYER_4 :
-                self.lblVP_Player4.setText("Victory Points: " + str(Player.Score))
+                self.lblVP_Player4.setText("Victory Points: " + str(Player.Score) + " - Avg : " + str(math.trunc(Player.AverageScore)))
+                
+
                 
     def RefreshHeldCards (self, New_Game):
         for Player in New_Game.Players :

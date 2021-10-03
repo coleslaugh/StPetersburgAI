@@ -6,6 +6,8 @@
 
 import sys
 
+from Brain import Brain
+
 from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PASS, PLAYERS,\
     CARPENTER_WORKSHOP_ABILITY, GOLD_SMELTER_ABILITY, BOARD_LOWER_ROW,\
     ARISTOCRAT_CARD_TYPE, BUILDING_CARD_TYPE, IS_UPGRADABLE, IS_NOT_UPGRADABLE,\
@@ -15,10 +17,10 @@ from Contents import PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, ACTION_BUY, ACTION_PA
     NUM_CARDS_WORKER_DECK, NUM_CARDS_BUILDING_DECK, NUM_CARDS_ARISTOCRAT_DECK,\
     NUM_CARDS_TRADING_DECK, PLAYER_DELT_CARD, PLAYER_DRAW_CARD
 
-from Brain import Brain
-from random import randint
-
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Player Class
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
 class Player(object):
       
     def __init__(self, ID, Name ,Color, Money, Score, Marker):
@@ -28,6 +30,7 @@ class Player(object):
         self.Color = Color
         self.Money = Money
         self.Score = Score
+        self.AverageScore = 0
         self.Marker = Marker
         self.Hand = []
         self.hasPassed = False
@@ -39,6 +42,7 @@ class Player(object):
         self.UniqueAristrocrats = 0
         self.Brain = Brain (self.ID)
         self.ActionsTaken = []
+
         
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions to Buy, Hold, Upgrade and Pass Cards
@@ -171,6 +175,22 @@ class Player(object):
                      
         return CardsInPlay 
     
+    def DetermineUniqueAristocrats (self, CardsInPlay):
+        
+        # Reset the Unique Aristocrat flag for each player
+        for Card in CardsInPlay :
+            Card.isUniqueAristocrat = False
+        
+        for Card in CardsInPlay:
+            if Card.CardType == ARISTOCRAT_CARD_TYPE :
+                # Assume card is unique aristocrat
+                Card.isUniqueAristocrat = True
+                for PlayerCard in self.Hand :
+                    # If matching (active or held) card is found then card is not unique 
+                    if Card.CardID == PlayerCard.CardID :
+                        Card.isUniqueAristocrat = False
+    
+    
     def DetermineBuyableCards (self, CardsInPlay):
         
         BuyableCards = []
@@ -260,37 +280,43 @@ class Player(object):
            
         return observatory_actions
     
+
+    
+    
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Function to determine what action the player takes
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def DetermineAction(self, Actions, CurrentRound, CurrentPhase, EndOfGame):
     
-        # The AI Brain will need to be called here instead of the random call
-        SelectedAction = self.Brain.SelectBestAction(Actions, CurrentRound, CurrentPhase, EndOfGame)
-        self.ActionsTaken.append ([SelectedAction, CurrentRound, CurrentPhase, EndOfGame])
-        
-        if SelectedAction[0] == ACTION_BUY :
-            #print(PLAYERS[self.ID][1] + " decided to buy " + SelectedAction[1].CardName)
-            return ACTION_BUY, SelectedAction[1]
-        
-        if SelectedAction[0] == ACTION_HOLD:
-            return ACTION_HOLD, SelectedAction[1]
-        
-        if SelectedAction[0] == ACTION_UPGRADE :
-            return ACTION_UPGRADE, SelectedAction[1]
-        
-        if SelectedAction[0] == ACTION_PUB :
-            return ACTION_PUB, SelectedAction[1]
-        
-        if SelectedAction[0] == ACTION_OBSERVATORY :
-            return ACTION_OBSERVATORY, SelectedAction[1]
-        
-        if SelectedAction[0] == ACTION_PASS :
-            return ACTION_PASS, []
+        try :
+            # Call the AI Brain Here
+            SelectedAction = self.Brain.SelectBestAction(Actions, CurrentRound, CurrentPhase, EndOfGame)
+            self.ActionsTaken.append ([SelectedAction, CurrentRound, CurrentPhase, EndOfGame])
+            
+            if SelectedAction[0] == ACTION_BUY :
+                #print(PLAYERS[self.ID][1] + " decided to buy " + SelectedAction[1].CardName)
+                return ACTION_BUY, SelectedAction[1]
+            
+            if SelectedAction[0] == ACTION_HOLD:
+                return ACTION_HOLD, SelectedAction[1]
+            
+            if SelectedAction[0] == ACTION_UPGRADE :
+                return ACTION_UPGRADE, SelectedAction[1]
+            
+            if SelectedAction[0] == ACTION_PUB :
+                return ACTION_PUB, SelectedAction[1]
+            
+            if SelectedAction[0] == ACTION_OBSERVATORY :
+                return ACTION_OBSERVATORY, SelectedAction[1]
+            
+            if SelectedAction[0] == ACTION_PASS :
+                return ACTION_PASS, []
+        except :
+            print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function to Save the Brain Rewards at the end of the game
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
     def SaveBrain (self):
-        self.Brain.UpdateRewards (self.ActionsTaken, self.Score)
+        self.Brain.UpdateRewards (self.ActionsTaken, self.Score, self.Hand)
         self.Brain.SaveBrain()

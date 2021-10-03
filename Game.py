@@ -5,26 +5,31 @@
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 from random import random
+import numpy as numpy
 import sys
 
 from Deck import Deck
-from Contents import (  PLAYERS, PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, 
-                        PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED, 
-                        PLAYERS_PER_GAME, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, 
-                        WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, TRADING_CARDS,
-                        WORKER_CARD_TYPE, BUILDING_CARD_TYPE, ARISTOCRAT_CARD_TYPE, TRADING_CARD_TYPE,
-                        PHASES, PHASE_BUILDING,
-                        MARKERS,PLAYER_MARKER_WORKER, PLAYER_MARKER_BUIDLING, PLAYER_MARKER_ARISTOCRAT, PLAYER_MARKER_TRADING,
-                        ACTIONS, ACTION_BUY, ACTION_HOLD, ACTION_PASS, ACTION_UPGRADE, ACTION_OBSERVATORY, ACTION_PUB,
-                        BOARD_UPPER_ROW, BOARD_LOWER_ROW, 
-                        PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, PENALTY_HELD_CARD, 
-                        TAX_MAN_ID, MARIINSKIJ_THEATER_ID, MAX_CARDS_TO_HOLD, 
-                        MONEY_PER_VP, ARISTOCRAT_SCORING, CLASS_ALL, MAX_CARDS_ON_BOARD,
-                        PUB_ABILITY, OBSERVATORY_ABILITY, IS_UPGRADABLE,  PLAYER_DRAW_CARD,
-                        PLAYER_DELT_CARD)
 from Player import Player
 
+from Contents import PLAYERS, PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, \
+    PLAYER_BLUE, PLAYER_GREEN, PLAYER_YELLOW, PLAYER_RED, \
+    PLAYERS_PER_GAME, PLAYER_STARTING_MONEY, PLAYER_STARTING_SCORE, \
+    WORKER_CARDS, BUILDING_CARDS, ARISTOCRAT_CARDS, TRADING_CARDS, \
+    WORKER_CARD_TYPE, BUILDING_CARD_TYPE, ARISTOCRAT_CARD_TYPE, TRADING_CARD_TYPE, \
+    PHASES, PHASE_WORKER, PHASE_BUILDING, PHASE_ARISTOCRAT, PHASE_TRADING, \
+    MARKERS,PLAYER_MARKER_WORKER, PLAYER_MARKER_BUIDLING, PLAYER_MARKER_ARISTOCRAT, PLAYER_MARKER_TRADING, \
+    ACTIONS, ACTION_BUY, ACTION_HOLD, ACTION_PASS, ACTION_UPGRADE, ACTION_OBSERVATORY, ACTION_PUB, \
+    BOARD_UPPER_ROW, BOARD_LOWER_ROW, \
+    PLAYER_ACTIVE_CARD, PLAYER_HELD_CARD, PENALTY_HELD_CARD, PLAYER_DELT_CARD, PLAYER_DRAW_CARD, \
+    TAX_MAN_ID, MARIINSKIJ_THEATER_ID, MAX_CARDS_TO_HOLD, \
+    MONEY_PER_VP, ARISTOCRAT_SCORING, CLASS_ALL, MAX_CARDS_ON_BOARD, \
+    PUB_ABILITY, OBSERVATORY_ABILITY, IS_UPGRADABLE
+    
 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Game Class
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
 class Game(object):
 
     def __init__(self, GameID):
@@ -79,52 +84,27 @@ class Game(object):
         print ("Starting to Deal Cards for the " + PHASES[GamePhase][1] + " - Worker Deck Top Card - " + str(self.WorkerDeck.TopCard) + " : Building Deck Top Card - " + str(self.BuildingDeck.TopCard) + " : Aristocrat Deck Top Card - " + str(self.AristocratDeck.TopCard) + " : Trading Deck Top Card - " + str(self.TradingDeck.TopCard))
         print ("Cards to deal: " + str(MAX_CARDS_ON_BOARD - len(self.CardsInPlay)))
         CardsDelt = ""
-        if GamePhase == WORKER_CARD_TYPE :
-            while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                if self.WorkerDeck.TopCard < len (self.WorkerDeck.Cards) :
-                    self.WorkerDeck.Cards[self.WorkerDeck.TopCard].CardStatus = PLAYER_DELT_CARD
-                    self.CardsInPlay.append(self.WorkerDeck.Cards[self.WorkerDeck.TopCard])
-                    CardsDelt = CardsDelt + " : " + self.WorkerDeck.Cards[self.WorkerDeck.TopCard].CardName 
-                    self.WorkerDeck.TopCard += 1
-                if self.WorkerDeck.TopCard >= len (self.WorkerDeck.Cards) :
-                    self.EndOfGame = True
-                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " : Worker Deck Empty. Game will Terminate at the end of the phase")
-                    return
         
-        if GamePhase == BUILDING_CARD_TYPE :
-            while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                if self.BuildingDeck.TopCard < len (self.BuildingDeck.Cards) :
-                    self.BuildingDeck.Cards[self.BuildingDeck.TopCard].CardStatus = PLAYER_DELT_CARD
-                    self.CardsInPlay.append(self.BuildingDeck.Cards[self.BuildingDeck.TopCard])
-                    CardsDelt = CardsDelt + " : " + self.BuildingDeck.Cards[self.BuildingDeck.TopCard].CardName
-                    self.BuildingDeck.TopCard += 1
-                if self.BuildingDeck.TopCard >= len (self.BuildingDeck.Cards) :
-                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " : Building Deck Empty. Game will Terminate at the end of the phase")
-                    self.EndOfGame = True
-                    return            
+        if GamePhase == PHASE_WORKER :
+            ActiveDeck = self.WorkerDeck
+        if GamePhase == PHASE_BUILDING :
+            ActiveDeck = self.BuildingDeck
+        if GamePhase == PHASE_ARISTOCRAT :
+            ActiveDeck = self.AristocratDeck
+        if GamePhase == PHASE_TRADING :
+            ActiveDeck = self.TradingDeck
         
-        if GamePhase == ARISTOCRAT_CARD_TYPE :
-            while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                if self.AristocratDeck.TopCard < len (self.AristocratDeck.Cards) :
-                    self.AristocratDeck.Cards[self.AristocratDeck.TopCard].CardStatus = PLAYER_DELT_CARD
-                    self.CardsInPlay.append(self.AristocratDeck.Cards[self.AristocratDeck.TopCard])
-                    CardsDelt = CardsDelt + " : " + self.AristocratDeck.Cards[self.AristocratDeck.TopCard].CardName
-                    self.AristocratDeck.TopCard += 1
-                if self.AristocratDeck.TopCard >= len (self.AristocratDeck.Cards) :
-                    self.EndOfGame = True
-                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " : Aristocrat Deck Empty. Game will Terminate at the end of the phase")
-                    return          
-        if GamePhase == TRADING_CARD_TYPE :
-            while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
-                if self.TradingDeck.TopCard < len (self.TradingDeck.Cards) :
-                    self.TradingDeck.Cards[self.TradingDeck.TopCard].CardStatus = PLAYER_DELT_CARD
-                    self.CardsInPlay.append(self.TradingDeck.Cards[self.TradingDeck.TopCard])
-                    CardsDelt = CardsDelt + " : " + self.TradingDeck.Cards[self.TradingDeck.TopCard].CardName
-                    self.TradingDeck.TopCard += 1
-                if self.TradingDeck.TopCard >= len (self.TradingDeck.Cards) :
-                    self.EndOfGame = True
-                    print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " : Trading Card Deck Empty. Game will Terminate at the end of the phase")
-                    return 
+        while len (self.CardsInPlay) < MAX_CARDS_ON_BOARD :
+            if ActiveDeck.TopCard < len (ActiveDeck.Cards) :
+                ActiveDeck.Cards[ActiveDeck.TopCard].CardStatus = PLAYER_DELT_CARD
+                self.CardsInPlay.append(ActiveDeck.Cards[ActiveDeck.TopCard])
+                CardsDelt = CardsDelt + " : " + ActiveDeck.Cards[ActiveDeck.TopCard].CardName 
+                ActiveDeck.TopCard += 1
+            if ActiveDeck.TopCard >= len (ActiveDeck.Cards) :
+                self.EndOfGame = True
+                print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt + " : Deck Empty. Game will Terminate at the end of the phase")
+                return
+                
         print ("Cards delt for the " + PHASES[GamePhase][1] +  CardsDelt)
 
     def RotateCards (self):
@@ -185,6 +165,9 @@ class Game(object):
                     # Determine Card Costs here and pass it to Determine Action
                     Player.DetermineCardCosts(self.CardsInPlay)
     
+                    # Determine which Aristocrats on the board are unique to the player. Sets the Unique Aristocrat Flag
+                    Player.DetermineUniqueAristocrats(self.CardsInPlay)
+                    
                     # Determine which cards in play the current player can Buy with the money he has
                     BuyableCards = Player.DetermineBuyableCards(self.CardsInPlay)
                     
@@ -204,17 +187,20 @@ class Game(object):
                     
                     # Add Buyable Cards to the Actions List
                     for Card in BuyableCards :
-                        Actions.append([ACTION_BUY, Card])
+                        Actions.append([ACTION_BUY, Card, Card.CardStatus, Card.isUniqueAristocrat])
                     
                     # Add Holdable cards to Actions list considering if the player has the warehouse
                     if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
                         for Card in HoldableCards :
-                            Actions.append ([ACTION_HOLD, Card])
+                            Actions.append ([ACTION_HOLD, Card, Card.isUniqueAristocrat])
                             
                     # Add Upgradable Card Pairs to the Actions List
                     for CardPair in UpgradableCards :
-                        Actions.append([ACTION_UPGRADE, CardPair])   
-                       
+                        if CardPair[1].CardType == ARISTOCRAT_CARD_TYPE :
+                            Actions.append([ACTION_UPGRADE, CardPair, CardPair[0].CardStatus, not CardPair[1].isUniqueAristocrat])   
+                        else:
+                            Actions.append([ACTION_UPGRADE, CardPair, CardPair[0].CardStatus, False])
+                            
                     # Add which decks the Observatory can be use to draw from to the Actions List
                     if Phase == PHASE_BUILDING and Player.ObservatoryBonus == OBSERVATORY_ABILITY and Player.UsedObservatory == False :
                         for DrawDeck in DrawDecks :
@@ -356,17 +342,20 @@ class Game(object):
             # Find the discounted cost of the card
             Player.DetermineCardCosts (list([SelectedCard]))
             
+            # Determine if the Drawn card is a unique Aristocrat
+            Player.DetermineUniqueAristocrats(list([SelectedCard]))
+            
             # if the player has the money to buy the card add a Buy Action to the actions list
             if Player.Money >= SelectedCard.DiscountedCost and SelectedCard.isUpgradable == IS_UPGRADABLE :
                 print  (PLAYERS[Player.ID][1] + " has the option to buy the card : Card Selected -  " + SelectedCard.CardName)
-                Actions.append([ACTION_BUY, SelectedCard])
+                Actions.append([ACTION_BUY, SelectedCard, SelectedCard.CardStatus, SelectedCard.isUniqueAristocrat])
                 
             # If the player do not have the money to buy the card add a Hold Action to the actions list
             if Player.Money < SelectedCard.DiscountedCost and SelectedCard.isUpgradable == IS_UPGRADABLE :
                 if Player.HeldCards < (MAX_CARDS_TO_HOLD + Player.WarehouseBonus) :
                     print  (PLAYERS[Player.ID][1] + " has the option to hold the card : Card Selected -  " + SelectedCard.CardName)
-                    Actions.append([ACTION_HOLD, SelectedCard])
-            
+                    Actions.append([ACTION_HOLD, SelectedCard, SelectedCard.isUniqueAristocrat])
+                    
             # Add Actions if the card was a Trading Card
             
             if SelectedCardType == TRADING_CARD_TYPE :
@@ -379,7 +368,10 @@ class Game(object):
                             
                         if TradingCardCost <= Player.Money :
                             print  (PLAYERS[Player.ID][1] + " has the option to upgrade the card : Card Selected -  " + SelectedCard.CardName + " : Target Card - " + TargetCard.CardName)
-                            Actions.append([ACTION_UPGRADE,list([SelectedCard, TargetCard])])
+                            if TargetCard.CardType == ARISTOCRAT_CARD_TYPE :
+                                Actions.append([ACTION_UPGRADE,list([SelectedCard, TargetCard]), SelectedCard.CardStatus, not TargetCard.isUniqueAristocrat])
+                            else :
+                                Actions.append([ACTION_UPGRADE,list([SelectedCard, TargetCard]), SelectedCard.CardStatus, False])
     
             print  (PLAYERS[Player.ID][1] + " has the option to discard (Pass) the card : Card Selected -  " + SelectedCard.CardName)
             Actions.append([ACTION_PASS])
@@ -465,7 +457,7 @@ class Game(object):
                 Actions = []
                 OldScore = Player.Score
                 OldMoney = Player.Money
-                for x in range (0, 5) :
+                for x in range (0, 6) :
                     if Player.Money >= x * 2 :
                         Actions.append ([ACTION_PUB, x])
                     
@@ -517,11 +509,39 @@ class Game(object):
         return
     
 
+    def ResetPlayersBrains (self, Episode_Average_Scores) :
+        
+        High_Score = numpy.argmax(Episode_Average_Scores, axis=0)
+        High_Player_ID = Episode_Average_Scores[High_Score[2]][0]
+        
+        for Player in self.Players :
+            if Player.ID == High_Player_ID :
+                High_Player = Player 
+        
+        for Player in self.Players :
+            Player.Brain.ReplaceBrain(High_Player.Brain.Action_Dataframe)
+            Player.Brain.SaveBrain()
+
+    
+    
     def SavePlayersBrains (self):
         for Player in self.Players :
             Player.SaveBrain()
         
-
+    def UpdateAvgScores (self, Episode_Scores):
+        avg_episode_scores = []
+        
+        for avg_score in Episode_Scores :
+            for Player in self.Players :
+                if avg_score[0] == Player.ID :
+                    num_games = avg_score[1]
+                    new_num_games = num_games + 1
+                    player_avg_score = avg_score[2]
+                    new_player_avg_score = ((player_avg_score * num_games) + Player.Score)/(new_num_games)
+                    avg_episode_scores.append([Player.ID, new_num_games, new_player_avg_score])
+                    Player.AverageScore = new_player_avg_score
+        
+        return avg_episode_scores
         
 
                 

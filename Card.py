@@ -6,10 +6,12 @@
 
 from random import random
 
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Card Class
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
 class Card(object):
     
-
     def __init__(self, param):
         self.CardID = param['ID']
         self.CardType = param['Card Type']
@@ -26,4 +28,5 @@ class Card(object):
         self.CardClass = param['Class']
         self.Row = 0
         self.CardDiscount = 0
+        self.isUniqueAristocrat = False
         self.CardOrder = random ()
