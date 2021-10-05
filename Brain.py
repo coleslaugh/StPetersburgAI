@@ -14,7 +14,11 @@ from Contents import  ACTIONS, ACTION_BUY, DECKS, TRADING_CARDS,\
     ACTION_PUB, ACTION_PASS, PLAYER_HELD_CARD, \
     LUMBERJACK_CARD, POPE_CARD, AUTHOR_CARD, CARD_TYPES, PHASE_WORKER, PLAYERS,\
     ARISTOCRAT_CARDS, BRAIN_MAX_ACTION_VALUE, BRAIN_MIN_ACTION_VALUE,\
-    ARISTOCRAT_CARD_TYPE, BRAIN_PENALTY_HELD_CARD
+    ARISTOCRAT_CARD_TYPE, BRAIN_PENALTY_HELD_CARD, BRAIN_REWARD_BUY_HELD_CARD,\
+    BRAIN_REWARD_BUY_UNIQUE_ARISTOCRAT, BRAIN_REWARD_HOLD_UNIQUE_ARISTOCRAT,\
+    BRAIN_REWARD_MONEY_VALUE, BRAIN_REWARD_VP_VALUE,\
+    BRAIN_REWARD_CARD_MULTIPLIER, CARPENTER_WORKSHOP_ID, GOLD_SMELTER_ID,\
+    MARIINSKIJ_THEATER_ID, TAX_MAN_ID
 
 from Card import Card
 
@@ -40,6 +44,9 @@ class Brain (object):
         #self.penalty_increment = 0
         
       
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Brain Initialization functions
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
     def InitializeBrain (self, Brain_Settings):
                
         self.epsilon = Brain_Settings['Epsilon']
@@ -215,10 +222,10 @@ class Brain (object):
         self.Action_Dataframe = Dataframe
     
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-# Update Brain Functions
+# Functions to give Rewards and Penalties for Actions
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-    def UpdateRewards (self, ActionsTaken, FinalScore, Hand):
-        
+    
+    def DetermineFinalScoreRewards (self, FinalScore):
         Reward = 0
         
         if FinalScore == self.target_score :
@@ -236,32 +243,99 @@ class Brain (object):
             Reward = 2 * self.penalty_value
         if FinalScore < self.target_score - (2 * self.penalty_bands) :
             Reward = 3 * self.penalty_value
+    
+        return Reward
+    
+    def DetermineKeptHeldCardPenalty (self, Action, Hand):
         
-        for ActionTaken in ActionsTaken :
+        Reward = 0
         
-            Action = ActionTaken[0]
-            Round = ActionTaken[1]
-            Phase = ActionTaken[2]
-            EndOfGame = ActionTaken[3]
-            
-            if Action[0] == ACTION_HOLD :
-                for Card in Hand :
-                    if Card.CardStatus == PLAYER_HELD_CARD :
-                        if Card == Action[1] :
-                            Reward += BRAIN_PENALTY_HELD_CARD
-            
-            StateIndex = self.DetermineStateIndex(Round, EndOfGame)
-            ActionCol =  self.DetermineActionCol(Action)
+        if Action[0] == ACTION_HOLD :
+            for Card in Hand :
+                if Card.CardStatus == PLAYER_HELD_CARD :
+                    if Card == Action[1] :
+                        Reward = BRAIN_PENALTY_HELD_CARD
+        return Reward
+    
+    def DetermineBuyHeldCardRewards (self, Action):
         
-            if Action[0] != ACTION_PASS :
-                self.Action_Dataframe.at[StateIndex, ActionCol] += Reward
+        Reward = 0
+        
+        if Action[0] == ACTION_BUY :
+            if Action [2] == PLAYER_HELD_CARD :
+                Reward = BRAIN_REWARD_BUY_HELD_CARD
+        
+        return Reward
+    
+    def DetermineUniqueAristocratRewards (self, Action):
+        
+        Reward = 0
+        
+        if Action[0] == ACTION_BUY or Action[0] == ACTION_UPGRADE :
+            if Action [3] == True :
+                Reward = BRAIN_REWARD_BUY_UNIQUE_ARISTOCRAT
                 
-            if self.Action_Dataframe.loc[StateIndex, ActionCol] < BRAIN_MIN_ACTION_VALUE :
-                self.Action_Dataframe.at[StateIndex, ActionCol] = BRAIN_MIN_ACTION_VALUE
-            if self.Action_Dataframe.loc[StateIndex, ActionCol] > BRAIN_MAX_ACTION_VALUE :
-                self.Action_Dataframe.at[StateIndex, ActionCol] = BRAIN_MAX_ACTION_VALUE
-        return
-
+        if Action[0] == ACTION_HOLD :
+            if Action [2] == True :
+                Reward = BRAIN_REWARD_HOLD_UNIQUE_ARISTOCRAT
+        
+        return Reward
+    
+    def DetermineCardRewards (self, Action) :
+        
+        Reward = 0
+        
+        if Action[0] == ACTION_BUY :
+            Reward = round((((Action[1].MoneyEarned * BRAIN_REWARD_MONEY_VALUE)+(Action[1].VPEarned * BRAIN_REWARD_VP_VALUE))/(Action[1].CardCost)) * BRAIN_REWARD_CARD_MULTIPLIER, 0) 
+        
+        if Action[0] == ACTION_UPGRADE :
+            TradingCard = Action[1][0]
+            TargetCard = Action[1][1]
+            Cost = TradingCard.CardCost - TargetCard.CardCost
+            
+            if TradingCard.CardID == CARPENTER_WORKSHOP_ID or TradingCard.CardID == GOLD_SMELTER_ID or TradingCard.CardID == MARIINSKIJ_THEATER_ID or TradingCard.CardID == TAX_MAN_ID :
+                Money = 3
+            else : 
+                Money = TradingCard.MoneyEarned - TargetCard.MoneyEarned
+            
+            VP = TradingCard.VPEarned - TargetCard.VPEarned
+            
+            if Cost < 1 : Cost = 1
+            
+            Reward = round((((Money * BRAIN_REWARD_MONEY_VALUE)+(VP * BRAIN_REWARD_VP_VALUE))/(Cost)) * BRAIN_REWARD_CARD_MULTIPLIER, 0)
+        
+        return int(Reward)
+    
+    def UpdateRewards (self, ActionsTaken, FinalScore, Hand):
+        
+        try :
+            ScoreReward = self.DetermineFinalScoreRewards (FinalScore)
+            
+            for ActionTaken in ActionsTaken :
+            
+                Action = ActionTaken[0]
+                Round = ActionTaken[1]
+                EndOfGame = ActionTaken[3]
+                StateIndex = self.DetermineStateIndex(Round, EndOfGame)
+                ActionCol =  self.DetermineActionCol(Action)
+                
+                Reward = ScoreReward
+                Reward += self.DetermineKeptHeldCardPenalty (Action, Hand)
+                Reward += self.DetermineBuyHeldCardRewards(Action)
+                Reward += self.DetermineUniqueAristocratRewards(Action)
+                Reward += self.DetermineCardRewards (Action)
+                # Only update Dataframe for non-pass actions
+                if Action[0] != ACTION_PASS :
+                    self.Action_Dataframe.at[StateIndex, ActionCol] += Reward
+                    
+                    if self.Action_Dataframe.loc[StateIndex, ActionCol] < BRAIN_MIN_ACTION_VALUE :
+                        self.Action_Dataframe.at[StateIndex, ActionCol] = BRAIN_MIN_ACTION_VALUE
+                    if self.Action_Dataframe.loc[StateIndex, ActionCol] > BRAIN_MAX_ACTION_VALUE :
+                        self.Action_Dataframe.at[StateIndex, ActionCol] = BRAIN_MAX_ACTION_VALUE
+            return
+        except :
+            print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
+            
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Select Best Action Functions
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -377,49 +451,4 @@ class Brain (object):
         
         except :
             print('Error: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
-    
-if __name__ == "__main__":
-
-    my_brain= Brain (1)
-    my_brain.SaveBrain()
-    
-    Actions = []
-    Card1 = Card(LUMBERJACK_CARD)
-    TradingCard = Card (POPE_CARD)
-    TargetCard = Card (AUTHOR_CARD)
-    
-    CardPair = [TradingCard, TargetCard]
-    
-    
-    
-   
-    Actions.append([ACTION_BUY, Card1])
-    Actions.append([ACTION_HOLD, Card1])
-    Actions.append([ACTION_UPGRADE, CardPair])
-    Actions.append([ACTION_OBSERVATORY, WORKER_CARD_TYPE])
-    Actions.append([ACTION_PUB, 3])
-    Actions.append([ACTION_PASS])
-    
-    my_brain.SelectBestAction(Actions, 3, PHASE_WORKER, False)
-    my_brain.SaveBrain()
-    
-    #my_brain.DetermineStateIndex(8, PHASE_ARISTOCRAT, True)
-    
-    #my_brain.DetermineActionCol([ACTION_BUY, my_card])
-    #my_brain.DetermineActionCol([ACTION_HOLD, my_card])
-    #my_brain.DetermineActionCol([ACTION_UPGRADE, CardPair])
-    
-    #my_brain.DetermineActionCol([ACTION_OBSERVATORY, WORKER_CARD_TYPE])
-    #my_brain.DetermineActionCol([ACTION_PUB, 3])
-    #my_brain.DetermineActionCol([ACTION_PASS])
-    
-    
-    #value = my_brain.Action_Dataframe.loc['3W','Buy-Lumber Jack']
-    #mylist = list(value.split(","))
-    #print (int(mylist[0])+1)
-    #my_brain.Action_Dataframe.at['3W','Buy-Lumber Jack'] = 25
-    #my_brain.Action_Dataframe.at['3W','Buy-Lumber Jack'] += 25
-    #my_brain.SaveBrain()
-    #print(df.loc['2W','B1'])
-    #print (my_brain.Action_Dataframe)
     
