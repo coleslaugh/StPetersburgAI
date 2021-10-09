@@ -19,7 +19,9 @@ from Contents import PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, PLAYER_COLORS, PLAY
     BRAIN_REWARD_VALUE, BRAIN_REWARD_BANDS, BRAIN_PENALTY_VALUE,\
     BRAIN_PENALTY_BANDS, BRAIN_TARGET_SCORE, BRAIN_TARGET_SCORE_INCREMENT,\
     BRAIN_DEFAULT_VALUE, BRAIN_PASS_DEFAULT_VAULE, BRAIN_RESET_INTERVAL,\
-    BRAIN_TARGET_SCORE_INCREMENT_INTERVAL
+    BRAIN_TARGET_SCORE_INCREMENT_INTERVAL, GUI_REFRESH_GAME_INTERVAL,\
+    GUI_REFRESH_PHASES, GUI_REFRESH_ROUNDS, GUI_SLEEP_BETWEEN_PHASES,\
+    GUI_SLEEP_BETWEEN_ROUNDS, GUI_SLEEP_BETWEEN_GAMES
 
 from MainWindow import Ui_MainWindow
 
@@ -36,8 +38,17 @@ class Worker (QObject):
     
     def __init__(self, total_games):
         self.Total_Games = total_games
-        self.sleep_between_phases = 0.02
+        self.sleep_between_phases = GUI_SLEEP_BETWEEN_PHASES
+        self.sleep_between_rounds = GUI_SLEEP_BETWEEN_ROUNDS
+        self.sleep_between_games = GUI_SLEEP_BETWEEN_GAMES
+        
         self.episode_avg_scores = [[PLAYER_1,0,0],[PLAYER_2,0,0],[PLAYER_3,0,0],[PLAYER_4,0,0]]
+        
+        self.GUI_Settings = {
+            'Refresh Phase' : False,
+            'Refresh Round' : False,
+            'Refresh Game Interval' : 0
+            }
         
         self.Brain_Settings = {
             'Epsilon':0, 
@@ -91,7 +102,7 @@ class Worker (QObject):
                 
                 # Update the UI
                 self.adddeckstogame[Game].emit(self.New_Game)
-                self.refreshboard[Game].emit(self.New_Game)
+                #self.refreshboard[Game].emit(self.New_Game)
                 Round_Count = 1
                 
                 while not self.New_Game.EndOfGame :
@@ -101,34 +112,39 @@ class Worker (QObject):
                     self.New_Game.DealCards(PHASE_WORKER)
                     self.New_Game.ProcessPhaseActions(PHASE_WORKER, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_WORKER)
-                    #self.refreshboard[Game].emit(self.New_Game)
-                    #time.sleep(self.sleep_between_phases)
+                    if self.GUI_Settings['Refresh Phase'] == True :
+                        self.refreshboard[Game].emit(self.New_Game)
+                        time.sleep(self.sleep_between_phases)
                                         
                     print("----------------------- Starting Building Phase -----------------------")
                     self.New_Game.DealCards (PHASE_BUILDING)
                     self.New_Game.ProcessPhaseActions(PHASE_BUILDING, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_BUILDING)
-                    #self.refreshboard[Game].emit(self.New_Game)
-                    #time.sleep(self.sleep_between_phases)                    
+                    if self.GUI_Settings['Refresh Phase'] == True :
+                        self.refreshboard[Game].emit(self.New_Game)
+                        time.sleep(self.sleep_between_phases)                    
             
                     print("----------------------- Starting Aristocrat Phase -----------------------")
                     self.New_Game.DealCards (PHASE_ARISTOCRAT)
                     self.New_Game.ProcessPhaseActions(PHASE_ARISTOCRAT, Round_Count)
                     self.New_Game.ProcessPhaseScoring(PHASE_ARISTOCRAT)
-                    #self.refreshboard[Game].emit(self.New_Game)
-                    #time.sleep(self.sleep_between_phases)    
+                    if self.GUI_Settings['Refresh Phase'] == True :
+                        self.refreshboard[Game].emit(self.New_Game)
+                        time.sleep(self.sleep_between_phases)   
             
                     print("----------------------- Starting Trading Phase -----------------------")
                     self.New_Game.DealCards (PHASE_TRADING)
                     self.New_Game.ProcessPhaseActions(PHASE_TRADING, Round_Count)
-                    #self.refreshboard[Game].emit(self.New_Game)
-                    #time.sleep(self.sleep_between_phases)
+                    if self.GUI_Settings['Refresh Phase'] == True :
+                        self.refreshboard[Game].emit(self.New_Game)
+                        time.sleep(self.sleep_between_phases)
                     
                     print("----------------------- Round Cleanup -----------------------")
                     self.New_Game.RotateCards ()
                     self.New_Game.RotateMarkers ()
-                    self.refreshboard[Game].emit(self.New_Game)
-                    #time.sleep(self.sleep_between_phases)
+                    if self.GUI_Settings['Refresh Round'] == True :
+                        self.refreshboard[Game].emit(self.New_Game)
+                        time.sleep(self.sleep_between_rounds)
     
                     print("----------------------------------------------- Completed Round "+ str(Round_Count) + " -----------------------------------------------")
                     
@@ -141,8 +157,9 @@ class Worker (QObject):
                 # Update Players Average Score
                 self.episode_avg_scores = self.New_Game.UpdateAvgScores(self.episode_avg_scores)
                 
-                self.refreshgamestatus.emit ("Completed Game " + str(Current_Game_Count))
-                self.refreshboard[Game].emit(self.New_Game)
+                if Current_Game_Count % self.GUI_Settings['Game Refresh Interval'] == 0 :
+                    self.refreshgamestatus.emit ("Completed Game " + str(Current_Game_Count))
+                    self.refreshboard[Game].emit(self.New_Game)
                 
                 # Only Save the brain in the simulation is still exploring
                 if self.Brain_Settings['Epsilon'] > 0.01 :
@@ -155,7 +172,7 @@ class Worker (QObject):
                         #Reset the Average Score Counter
                         self.episode_avg_scores = [[PLAYER_1,0,0],[PLAYER_2,0,0],[PLAYER_3,0,0],[PLAYER_4,0,0]]
 
-                time.sleep(.3)
+                #time.sleep(.3)
                                 
                 print("------------------------------------------------------------- Game " + str(Current_Game_Count) + " Completed -------------------------------------------------------------")
              
@@ -227,6 +244,10 @@ class Board(Ui_MainWindow):
         self.lineBrain_Pass_Default.setText(str(BRAIN_PASS_DEFAULT_VAULE))
         self.lineBrain_Reset_Interval.setText(str(BRAIN_RESET_INTERVAL))
         
+        self.lineRefreshGameInterval.setText(str(GUI_REFRESH_GAME_INTERVAL))
+        self.checkBoxRefreshPhases.setChecked(GUI_REFRESH_PHASES)
+        self.checkBoxRefreshRounds.setChecked(GUI_REFRESH_ROUNDS)
+        
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions to setup and run the game
     #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -280,6 +301,10 @@ class Board(Ui_MainWindow):
         self.worker.Brain_Settings['Default Action Value'] = int(self.lineBrain_Default.text())
         self.worker.Brain_Settings['Default Pass Value'] = int(self.lineBrain_Pass_Default.text())
         self.worker.Brain_Settings['Brain Reset Interval'] = int(self.lineBrain_Reset_Interval.text())
+        
+        self.worker.GUI_Settings['Refresh Phase'] = self.checkBoxRefreshPhases.isChecked()
+        self.worker.GUI_Settings['Refresh Round'] = self.checkBoxRefreshRounds.isChecked()
+        self.worker.GUI_Settings['Game Refresh Interval'] = int(self.lineRefreshGameInterval.text())
         
         return 
     

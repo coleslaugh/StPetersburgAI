@@ -531,9 +531,16 @@ BRAIN_REWARD_CARD_MULTIPLIER = 10
 BRAIN_REWARD_VP_VALUE = 1
 BRAIN_REWARD_MONEY_VALUE = .5
 
+#--------------------------------------------------------------------------
+# GUI Constants
+#--------------------------------------------------------------------------
 
-
-
+GUI_REFRESH_PHASES = True
+GUI_REFRESH_ROUNDS = True
+GUI_REFRESH_GAME_INTERVAL = 1
+GUI_SLEEP_BETWEEN_PHASES = 0.02
+GUI_SLEEP_BETWEEN_ROUNDS = 0.02
+GUI_SLEEP_BETWEEN_GAMES = .1
 
 
 
